@@ -1,0 +1,28 @@
+@'
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+ 
+# Node / Next.js
+node_modules/
+.next/
+out/
+ 
+# Environment files
+.env
+.env.local
+.env.*.local
+ 
+# Vector store & DB
+data/vector_store/
+*.sqlite
+ 
+# IDE & OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+'@ | Out-File -FilePath .gitignore -Encoding utf8
