@@ -1,0 +1,135 @@
+{
+  "version": "1.0",
+  "created_for": "Phase 5 RAG Pipeline",
+  "description": "Master index of all PolicyWise AI knowledge documents. Used by the RAG system to load, chunk, and embed documents for vector storage.",
+  "total_documents": 11,
+  "documents": [
+    {
+      "id": "KB-000",
+      "filename": "00_overview.md",
+      "path": "data/raw/knowledge/00_overview.md",
+      "title": "Car Insurance in India — Overview",
+      "topic": "introduction",
+      "tags": ["overview", "what is insurance", "mandatory", "IRDAI", "types", "premium"],
+      "estimated_tokens": 950,
+      "chunk_strategy": "paragraph",
+      "priority": "high"
+    },
+    {
+      "id": "KB-001",
+      "filename": "01_policy_types.md",
+      "path": "data/raw/knowledge/01_policy_types.md",
+      "title": "Car Insurance Policy Types",
+      "topic": "policy types",
+      "tags": ["third party", "comprehensive", "standalone OD", "policy comparison", "mandatory"],
+      "estimated_tokens": 1200,
+      "chunk_strategy": "section",
+      "priority": "high"
+    },
+    {
+      "id": "KB-002",
+      "filename": "02_key_terms.md",
+      "path": "data/raw/knowledge/02_key_terms.md",
+      "title": "Key Terms in Car Insurance — Glossary",
+      "topic": "terminology",
+      "tags": ["IDV", "NCB", "premium", "deductible", "zero dep", "CSR", "endorsement", "exclusions"],
+      "estimated_tokens": 1500,
+      "chunk_strategy": "term",
+      "priority": "high"
+    },
+    {
+      "id": "KB-003",
+      "filename": "03_coverage_details.md",
+      "path": "data/raw/knowledge/03_coverage_details.md",
+      "title": "Coverage Details — What's Covered and What's Not",
+      "topic": "coverage",
+      "tags": ["own damage", "third party", "PA cover", "exclusions", "CNG", "flood", "fire", "theft"],
+      "estimated_tokens": 1300,
+      "chunk_strategy": "section",
+      "priority": "high"
+    },
+    {
+      "id": "KB-004",
+      "filename": "04_add_ons.md",
+      "path": "data/raw/knowledge/04_add_ons.md",
+      "title": "Car Insurance Add-Ons — Complete Guide",
+      "topic": "add-ons",
+      "tags": ["zero dep", "engine protection", "NCB protect", "roadside assistance", "PA", "invoice cover", "tyre protect", "key replacement"],
+      "estimated_tokens": 1800,
+      "chunk_strategy": "add-on",
+      "priority": "high"
+    },
+    {
+      "id": "KB-005",
+      "filename": "05_claim_process.md",
+      "path": "data/raw/knowledge/05_claim_process.md",
+      "title": "Claim Process — Step-by-Step Guide",
+      "topic": "claims",
+      "tags": ["cashless claim", "reimbursement", "theft claim", "documents", "FIR", "surveyor", "settlement timeline"],
+      "estimated_tokens": 1600,
+      "chunk_strategy": "step",
+      "priority": "high"
+    },
+    {
+      "id": "KB-006",
+      "filename": "06_claim_scenarios.md",
+      "path": "data/raw/knowledge/06_claim_scenarios.md",
+      "title": "Real-World Claim Scenarios — Q&A",
+      "topic": "claim scenarios",
+      "tags": ["flood", "accident", "hit and run", "theft", "fire", "natural disaster", "drunk driving", "third party fault"],
+      "estimated_tokens": 2000,
+      "chunk_strategy": "scenario",
+      "priority": "high"
+    },
+    {
+      "id": "KB-007",
+      "filename": "07_insurers_india.md",
+      "path": "data/raw/knowledge/07_insurers_india.md",
+      "title": "Top Car Insurance Companies in India",
+      "topic": "insurers",
+      "tags": ["HDFC ERGO", "Bajaj Allianz", "ICICI Lombard", "Tata AIG", "New India", "CSR", "network garages"],
+      "estimated_tokens": 1400,
+      "chunk_strategy": "insurer",
+      "priority": "medium"
+    },
+    {
+      "id": "KB-008",
+      "filename": "08_renewal_guide.md",
+      "path": "data/raw/knowledge/08_renewal_guide.md",
+      "title": "Car Insurance Renewal Guide",
+      "topic": "renewal",
+      "tags": ["renewal", "grace period", "NCB transfer", "break-in insurance", "switch insurer", "lapsed policy"],
+      "estimated_tokens": 1100,
+      "chunk_strategy": "section",
+      "priority": "medium"
+    },
+    {
+      "id": "KB-009",
+      "filename": "09_buying_guide.md",
+      "path": "data/raw/knowledge/09_buying_guide.md",
+      "title": "How to Choose the Right Car Insurance — Buying Guide",
+      "topic": "buying guide",
+      "tags": ["buying guide", "choose policy", "IDV", "add-ons", "compare insurers", "red flags", "checklist"],
+      "estimated_tokens": 1200,
+      "chunk_strategy": "step",
+      "priority": "medium"
+    },
+    {
+      "id": "KB-010",
+      "filename": "10_faqs.md",
+      "path": "data/raw/knowledge/10_faqs.md",
+      "title": "Car Insurance — Frequently Asked Questions",
+      "topic": "FAQs",
+      "tags": ["FAQ", "mandatory", "NCB", "IDV", "zero dep", "renewal", "claim", "CNG", "endorsement", "ombudsman", "telematics"],
+      "estimated_tokens": 1800,
+      "chunk_strategy": "qa",
+      "priority": "high"
+    }
+  ],
+  "chunk_config": {
+    "max_chunk_size_tokens": 400,
+    "overlap_tokens": 50,
+    "embedding_model": "text-embedding-3-small",
+    "embedding_dimensions": 1536
+  }
+}

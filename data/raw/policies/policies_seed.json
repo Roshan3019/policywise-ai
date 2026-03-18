@@ -1,0 +1,222 @@
+[
+  {
+    "name": "HDFC ERGO Comprehensive Plus",
+    "insurer_name": "HDFC ERGO General Insurance",
+    "policy_type": "comprehensive",
+    "premium_min": 8500,
+    "premium_max": 14000,
+    "coverage_amount": 800000,
+    "claim_settlement_ratio": 96.74,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "Roadside Assistance", "NCB Protect"],
+    "description": "HDFC ERGO's flagship comprehensive plan. Offers AI-powered selfie-based claim filing for minor accidents, 24/7 support, and a massive cashless garage network."
+  },
+  {
+    "name": "Bajaj Allianz Smart Drive",
+    "insurer_name": "Bajaj Allianz General Insurance",
+    "policy_type": "comprehensive",
+    "premium_min": 9000,
+    "premium_max": 16000,
+    "coverage_amount": 900000,
+    "claim_settlement_ratio": 98.53,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "NCB Protect", "Personal Accident Cover", "Roadside Assistance"],
+    "description": "Bajaj Allianz's top-rated plan with the industry's highest CSR. Features Motor On-The-Spot repair service and a wide network of 7,000+ garages."
+  },
+  {
+    "name": "ICICI Lombard Complete Cover",
+    "insurer_name": "ICICI Lombard General Insurance",
+    "policy_type": "comprehensive",
+    "premium_min": 10000,
+    "premium_max": 18000,
+    "coverage_amount": 1200000,
+    "claim_settlement_ratio": 95.80,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "Invoice Cover", "Roadside Assistance", "Key Replacement"],
+    "description": "ICICI Lombard's premium comprehensive policy. Best-in-class digital experience via the IL TakeCare app with cashless garage locator and real-time claim tracking."
+  },
+  {
+    "name": "Tata AIG Motor Guard",
+    "insurer_name": "Tata AIG General Insurance",
+    "policy_type": "comprehensive",
+    "premium_min": 9500,
+    "premium_max": 15500,
+    "coverage_amount": 1000000,
+    "claim_settlement_ratio": 97.23,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "NCB Protect", "Tyre Protect", "Roadside Assistance"],
+    "description": "Tata AIG's trusted comprehensive plan with telematics-enabled Drive Smart pricing. Excellent brand trust and premium customer service."
+  },
+  {
+    "name": "New India Assurance Comprehensive",
+    "insurer_name": "New India Assurance Company",
+    "policy_type": "comprehensive",
+    "premium_min": 7000,
+    "premium_max": 12000,
+    "coverage_amount": 700000,
+    "claim_settlement_ratio": 92.12,
+    "add_ons": ["Zero Depreciation", "Personal Accident Cover"],
+    "description": "India's oldest and most widespread insurer. New India Assurance offers government-backed reliability with a presence in every major city and town."
+  },
+  {
+    "name": "Kotak Mahindra Comprehensive",
+    "insurer_name": "Kotak Mahindra General Insurance",
+    "policy_type": "comprehensive",
+    "premium_min": 8000,
+    "premium_max": 13500,
+    "coverage_amount": 850000,
+    "claim_settlement_ratio": 96.10,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "NCB Protect", "Roadside Assistance"],
+    "description": "Kotak's comprehensive plan with strong customer service and competitive pricing. Ideal for Kotak Bank customers availing bundle discounts."
+  },
+  {
+    "name": "Reliance General Motor Cover",
+    "insurer_name": "Reliance General Insurance",
+    "policy_type": "comprehensive",
+    "premium_min": 6500,
+    "premium_max": 11000,
+    "coverage_amount": 650000,
+    "claim_settlement_ratio": 91.40,
+    "add_ons": ["Zero Depreciation", "Roadside Assistance"],
+    "description": "Reliance General's budget-friendly comprehensive policy. Best for price-sensitive buyers who want basic complete coverage without heavy add-ons."
+  },
+  {
+    "name": "Navi Comprehensive Digital",
+    "insurer_name": "Navi General Insurance",
+    "policy_type": "comprehensive",
+    "premium_min": 7500,
+    "premium_max": 12500,
+    "coverage_amount": 750000,
+    "claim_settlement_ratio": 94.70,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "Roadside Assistance"],
+    "description": "Navi's 100% digital insurance product. No paperwork, instant policy issuance, and quick digital-first claim processing. Ideal for mobile-first users."
+  },
+  {
+    "name": "Oriental Insurance Comprehensive Package",
+    "insurer_name": "Oriental Insurance Company",
+    "policy_type": "comprehensive",
+    "premium_min": 6000,
+    "premium_max": 10500,
+    "coverage_amount": 600000,
+    "claim_settlement_ratio": 85.30,
+    "add_ons": ["Zero Depreciation"],
+    "description": "Oriental Insurance's standard comprehensive package. A heritage PSU insurer offering affordable premiums with wide rural reach."
+  },
+  {
+    "name": "United India Comprehensive Plan",
+    "insurer_name": "United India Insurance Company",
+    "policy_type": "comprehensive",
+    "premium_min": 6200,
+    "premium_max": 10800,
+    "coverage_amount": 620000,
+    "claim_settlement_ratio": 88.40,
+    "add_ons": ["Zero Depreciation", "Personal Accident Cover"],
+    "description": "United India Insurance's comprehensive offering. Government-owned with a long heritage, ideal for PSU employees and government sector customers."
+  },
+  {
+    "name": "HDFC ERGO Third-Party Cover",
+    "insurer_name": "HDFC ERGO General Insurance",
+    "policy_type": "third_party",
+    "premium_min": 2094,
+    "premium_max": 7897,
+    "coverage_amount": 750000,
+    "claim_settlement_ratio": 96.74,
+    "add_ons": ["Personal Accident Cover"],
+    "description": "HDFC ERGO's mandatory third-party liability coverage. Legally compliant, covering unlimited TP bodily injury compensation and up to ₹7.5 lakh property damage."
+  },
+  {
+    "name": "Bajaj Allianz Third-Party Insurance",
+    "insurer_name": "Bajaj Allianz General Insurance",
+    "policy_type": "third_party",
+    "premium_min": 2094,
+    "premium_max": 7897,
+    "coverage_amount": 750000,
+    "claim_settlement_ratio": 98.53,
+    "add_ons": ["Personal Accident Cover"],
+    "description": "Bajaj Allianz's third-party policy. The minimum legally required coverage at IRDAI-mandated premium rates with excellent claim support."
+  },
+  {
+    "name": "ICICI Lombard Third-Party Liability",
+    "insurer_name": "ICICI Lombard General Insurance",
+    "policy_type": "third_party",
+    "premium_min": 2094,
+    "premium_max": 7897,
+    "coverage_amount": 750000,
+    "claim_settlement_ratio": 95.80,
+    "add_ons": ["Personal Accident Cover"],
+    "description": "ICICI Lombard's IRDAI-regulated third-party plan. Best for owners of old cars (10+ years) who don't need own-damage coverage due to the car's low market value."
+  },
+  {
+    "name": "New India Assurance Third-Party",
+    "insurer_name": "New India Assurance Company",
+    "policy_type": "third_party",
+    "premium_min": 2094,
+    "premium_max": 7897,
+    "coverage_amount": 750000,
+    "claim_settlement_ratio": 92.12,
+    "add_ons": ["Personal Accident Cover"],
+    "description": "New India's third-party plan. Government-backed insurer with 3,000+ branches — easy to access for claim filing even in smaller towns."
+  },
+  {
+    "name": "HDFC ERGO Standalone OD Select",
+    "insurer_name": "HDFC ERGO General Insurance",
+    "policy_type": "standalone_od",
+    "premium_min": 5500,
+    "premium_max": 10000,
+    "coverage_amount": 800000,
+    "claim_settlement_ratio": 96.74,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "NCB Protect"],
+    "description": "HDFC ERGO's standalone own-damage plan for car owners who already have a long-term TP policy. Switch OD insurer freely every year for the best rates."
+  },
+  {
+    "name": "Bajaj Allianz Standalone OD Shield",
+    "insurer_name": "Bajaj Allianz General Insurance",
+    "policy_type": "standalone_od",
+    "premium_min": 6000,
+    "premium_max": 11000,
+    "coverage_amount": 900000,
+    "claim_settlement_ratio": 98.53,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "NCB Protect", "Roadside Assistance"],
+    "description": "Bajaj Allianz's standalone OD plan with their industry-leading 98.53% CSR. Pairs well with any valid TP policy for complete coverage."
+  },
+  {
+    "name": "ICICI Lombard Standalone OD Pro",
+    "insurer_name": "ICICI Lombard General Insurance",
+    "policy_type": "standalone_od",
+    "premium_min": 6500,
+    "premium_max": 12000,
+    "coverage_amount": 1200000,
+    "claim_settlement_ratio": 95.80,
+    "add_ons": ["Zero Depreciation", "Invoice Cover", "Engine Protection", "Tyre Protect"],
+    "description": "ICICI Lombard's premium standalone OD policy. Offers flexible add-on combinations and the best digital claim interface in the industry."
+  },
+  {
+    "name": "Tata AIG Standalone OD Guard",
+    "insurer_name": "Tata AIG General Insurance",
+    "policy_type": "standalone_od",
+    "premium_min": 6000,
+    "premium_max": 10500,
+    "coverage_amount": 1000000,
+    "claim_settlement_ratio": 97.23,
+    "add_ons": ["Zero Depreciation", "Engine Protection", "NCB Protect"],
+    "description": "Tata AIG's standalone OD plan. Telematics-ready with Drive Smart scoring — safe drivers get additional discounts at renewal."
+  },
+  {
+    "name": "Navi Standalone OD Digital",
+    "insurer_name": "Navi General Insurance",
+    "policy_type": "standalone_od",
+    "premium_min": 4500,
+    "premium_max": 8500,
+    "coverage_amount": 750000,
+    "claim_settlement_ratio": 94.70,
+    "add_ons": ["Zero Depreciation", "Engine Protection"],
+    "description": "Navi's budget-friendly standalone OD plan. Fully digital onboarding and claims — no physical inspection required in most cases. Great for savvy young car owners."
+  },
+  {
+    "name": "Kotak Mahindra Standalone OD Flex",
+    "insurer_name": "Kotak Mahindra General Insurance",
+    "policy_type": "standalone_od",
+    "premium_min": 5200,
+    "premium_max": 9500,
+    "coverage_amount": 850000,
+    "claim_settlement_ratio": 96.10,
+    "add_ons": ["Zero Depreciation", "NCB Protect", "Roadside Assistance", "Key Replacement"],
+    "description": "Kotak's flexible standalone OD plan. Customisable add-on selection and competitive pricing for car owners looking to split their TP and OD coverage."
+  }
+]
