@@ -250,7 +250,6 @@ a:hover { color: var(--accent-indigo); }
 /* Range slider */
 input[type="range"] {
   -webkit-appearance: none;
-  appearance: none;
   width: 100%;
   height: 4px;
   background: var(--glass-border);
