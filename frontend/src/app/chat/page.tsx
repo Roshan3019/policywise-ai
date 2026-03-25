@@ -1,36 +1,49 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import ChatBubble from "@/components/ChatBubble";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Send, Bot, ShieldQuestion } from "lucide-react";
 import type { ChatMessage } from "@/lib/types";
 
 const PHASE5_TOPICS = [
-  "Zero Depreciation Coverage",
+  "Zero Depreciation",
   "No Claim Bonus (NCB)",
-  "Insured Declared Value (IDV)",
-  "Comprehensive vs Third-Party",
-  "Engine Protection Add-on",
-  "Roadside Assistance",
-  "Claim Settlement Process",
+  "Insured Declared Value",
+  "Third-Party Cover",
+  "Engine Protection",
+  "Claim Settlement",
 ];
 
 const WELCOME_MESSAGE: ChatMessage = {
   id: "welcome",
   role: "ai",
   content:
-    "👋 Hello! I'm PolicyWise AI, your intelligent insurance advisor.\n\nI can help you understand car insurance concepts, explain policy terms, and guide your coverage decisions.\n\n⚡ Full AI capabilities are being wired in Phase 5. For now, explore the topics below or ask me anything!\n\nTo compare and get recommendations, visit the Compare or Recommend pages.",
+    "👋 Hello! I'm PolicyWise AI, your intelligent insurance advisor.\n\nI can help you understand car insurance concepts, explain policy terms, and guide your coverage decisions.\n\n⚡ Full AI capabilities are being wired in Phase 5. For now, try clicking a quick topic below or asking me what a term means!",
   timestamp: new Date(),
 };
 
-export default function ChatPage() {
+function ChatInterface() {
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q");
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (initialQuery && messages.length === 1) {
+      sendMessage(initialQuery);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuery]);
 
   const sendMessage = async (text?: string) => {
     const content = text ?? input.trim();
@@ -47,8 +60,8 @@ export default function ChatPage() {
     setInput("");
     setIsLoading(true);
 
-    // Phase 5 stub — returns an informative holding response
-    await new Promise((r) => setTimeout(r, 800));
+    // Phase 5 stub simulation
+    await new Promise((r) => setTimeout(r, 1000));
 
     const aiResponse: ChatMessage = {
       id: (Date.now() + 1).toString(),
@@ -62,219 +75,114 @@ export default function ChatPage() {
   };
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        paddingTop: "64px",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          maxWidth: "900px",
-          width: "100%",
-          margin: "0 auto",
-          padding: "24px",
-          flexDirection: "column",
-          height: "calc(100vh - 64px)",
-        }}
-      >
+    <main className="min-h-screen pt-16 bg-slate-50 flex flex-col items-center">
+      <div className="w-full max-w-3xl flex-1 flex flex-col bg-white border-x border-slate-200 shadow-sm relative h-[calc(100vh-4rem)]">
         {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            marginBottom: "24px",
-            paddingBottom: "20px",
-            borderBottom: "1px solid var(--glass-border)",
-          }}
-        >
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: "12px",
-              background: "var(--grad-brand)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "22px",
-              boxShadow: "var(--shadow-glow)",
-            }}
-          >
-            🤖
-          </div>
-          <div>
-            <h1 style={{ fontSize: "1.2rem", fontWeight: 700 }}>AI Insurance Assistant</h1>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: "#4ade80",
-                  display: "inline-block",
-                }}
-              />
-              <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
-                Online · Full AI in Phase 5
-              </p>
+        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+              <ShieldQuestion size={20} />
+            </div>
+            <div>
+              <h1 className="font-heading font-bold text-slate-900">AI Insurance Assistant</h1>
+              <div className="flex items-center gap-1.5 opacity-80">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-medium text-slate-500">Available · Phase 5 Stub mode</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Conversation area */}
-        <div
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            overflowX: "hidden",
-            marginBottom: "20px",
-            paddingRight: "4px",
-          }}
-        >
-          {messages.map((msg) => (
-            <ChatBubble key={msg.id} message={msg} />
-          ))}
-
-          {/* Loading indicator */}
-          {isLoading && (
-            <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "12px" }}>
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: "50%",
-                  background: "var(--grad-brand)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "14px",
-                }}
-              >
-                🤖
+        {/* Chat Area */}
+        <ScrollArea className="flex-1 p-6">
+          <div className="flex flex-col gap-2 pb-4">
+            {messages.map((msg) => (
+              <ChatBubble key={msg.id} message={msg} />
+            ))}
+            
+            {isLoading && (
+              <div className="flex items-end gap-3 opacity-70 animate-fade-in pl-1">
+                <div className="w-8 h-8 rounded-full border border-emerald-100 bg-emerald-50 flex items-center justify-center text-emerald-600 mb-1 shrink-0">
+                  <Bot size={18} />
+                </div>
+                <div className="bg-slate-50 text-slate-500 px-4 py-3 rounded-2xl rounded-tl-none border border-slate-200 flex items-center gap-1.5 h-[46px]">
+                  <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                </div>
               </div>
-              <div className="chat-bubble-ai" style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: "50%",
-                      background: "var(--text-muted)",
-                      animation: `pulse-glow 1.2s ease-in-out ${i * 0.2}s infinite`,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-          <div ref={bottomRef} />
-        </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+        </ScrollArea>
 
-        {/* Quick topics */}
+        {/* Quick Topics */}
         {messages.length < 3 && (
-          <div style={{ marginBottom: "16px" }}>
-            <p style={{ fontSize: "0.75rem", color: "var(--text-subtle)", marginBottom: "8px" }}>
-              Popular topics:
-            </p>
-            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-              {PHASE5_TOPICS.map((topic) => (
-                <button
-                  key={topic}
-                  onClick={() => sendMessage(`What is ${topic}?`)}
-                  style={{
-                    padding: "6px 12px",
-                    border: "1px solid var(--glass-border)",
-                    borderRadius: "20px",
-                    background: "var(--glass-bg)",
-                    color: "var(--text-muted)",
-                    fontSize: "0.78rem",
-                    cursor: "pointer",
-                    transition: "all var(--duration-fast)",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(99,102,241,0.5)";
-                    (e.currentTarget as HTMLButtonElement).style.color = "var(--text-primary)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--glass-border)";
-                    (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)";
-                  }}
-                >
-                  {topic}
-                </button>
-              ))}
-            </div>
+          <div className="p-4 bg-slate-50/50 block">
+             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-2">Most Asked</p>
+             <div className="flex flex-wrap gap-2 px-2">
+               {PHASE5_TOPICS.map((topic) => (
+                 <button
+                   key={topic}
+                   onClick={() => sendMessage(`What is ${topic}?`)}
+                   className="px-3 py-1.5 text-sm font-medium bg-white border border-slate-200 text-slate-600 rounded-lg hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50 transition-all shadow-sm"
+                 >
+                   {topic}
+                 </button>
+               ))}
+             </div>
           </div>
         )}
 
-        {/* Input bar */}
-        <div
-          className="glass"
-          style={{
-            display: "flex",
-            gap: "12px",
-            padding: "12px",
-            borderRadius: "16px",
-          }}
-        >
-          <input
-            id="chat-input"
-            className="input-field"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
-            placeholder="Ask about car insurance..."
-            disabled={isLoading}
-            style={{
-              border: "none",
-              background: "transparent",
-              flex: 1,
-              fontSize: "0.9rem",
-            }}
-          />
-          <button
-            id="chat-send-btn"
-            className="btn-primary"
-            onClick={() => sendMessage()}
-            disabled={!input.trim() || isLoading}
-            style={{ padding: "10px 20px", flexShrink: 0 }}
+        {/* Input Bar */}
+        <div className="p-4 bg-white border-t border-slate-100">
+          <form 
+            onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
+            className="flex items-center gap-2 max-w-full"
           >
-            Send ↑
-          </button>
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="E.g. Explain No Claim Bonus like I'm 5..."
+              className="flex-1 h-12 shadow-sm rounded-xl border-slate-200 focus-visible:ring-emerald-500"
+              disabled={isLoading}
+            />
+            <Button 
+              type="submit" 
+              disabled={!input.trim() || isLoading}
+              className="h-12 w-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 shadow-md shrink-0 flex items-center justify-center p-0"
+            >
+              <Send size={18} />
+            </Button>
+          </form>
+          <div className="text-center mt-3 mb-1">
+            <span className="text-[10px] text-slate-400 font-medium tracking-wide uppercase">AI can make mistakes. Verify policy terms before buying.</span>
+          </div>
         </div>
       </div>
     </main>
   );
 }
 
-/**
- * Phase 5 stub — generates a useful holding response.
- * Replace this with an API call in Phase 5.
- */
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen pt-16 flex items-center justify-center">Loading AI...</div>}>
+      <ChatInterface />
+    </Suspense>
+  );
+}
+
 function generateStubResponse(query: string): string {
   const q = query.toLowerCase();
 
-  if (q.includes("idv") || q.includes("insured declared value"))
-    return "📋 **IDV (Insured Declared Value)** is the maximum amount your insurer will pay if your car is stolen or declared a total loss. It's calculated as the current market value of your car minus depreciation. A higher IDV means better protection but a higher premium.\n\n🔧 Full AI explanations with source citations are coming in Phase 5!";
+  if (q.includes("idv") || q.includes("declared value"))
+    return "The **Insured Declared Value (IDV)** is essentially the maximum sum assured fixed by the insurer which is provided on theft or total loss of vehicle. Think of it as the current market value of your car.\n\nIt is calculated by applying a depreciation percentage to the manufacturer's selling price of the car.";
 
   if (q.includes("ncb") || q.includes("no claim bonus"))
-    return "🏆 **No Claim Bonus (NCB)** is a discount you earn for not making a claim during your policy year. It ranges from 20% (after 1 claim-free year) up to 50% (after 5+ years). NCB is a huge benefit — protect it!\n\n🔧 Full AI explanations with source citations are coming in Phase 5!";
+    return "🏆 **No Claim Bonus (NCB)** is a discount in premium offered by car insurance companies to policyholders for not making any claims during the policy term. It's a reward for safe driving!\n\nThe discount typically starts at 20% for the first claim-free year and can go up to 50% for 5 consecutive claim-free years.";
 
-  if (q.includes("zero dep") || q.includes("zero depreciation"))
-    return "🛡️ **Zero Depreciation** (also called Nil Depreciation) is an add-on that ensures your insurer pays the full cost of parts replaced during a claim without deducting depreciation. Ideal for new cars in the first 3–5 years.\n\n🔧 Full AI explanations with source citations are coming in Phase 5!";
+  if (q.includes("zero dep") || q.includes("depreciation"))
+    return "🛡️ **Zero Depreciation Cover** (also known as Nil Depreciation or Bumper to Bumper policy) is a popular add-on that offers complete external coverage for your car without factoring in depreciation.\n\nWithout this, if your car is damaged, you'll only receive the depreciated value of the replaced parts, meaning you pay the difference out of pocket.";
 
-  if (q.includes("comprehensive"))
-    return "🌟 **Comprehensive Insurance** covers both own damage (your car) AND third-party liability (damage to others). It's the most complete coverage available and includes protection against theft, natural calamities, and accidents.\n\n🔧 Full AI explanations with source citations are coming in Phase 5!";
-
-  if (q.includes("third party") || q.includes("third-party"))
-    return "⚖️ **Third-Party Insurance** is legally mandatory in India. It covers damage or injury caused to other people/property. It does NOT cover your own car's damage. It's affordable but limited in protection.\n\n🔧 Full AI explanations with source citations are coming in Phase 5!";
-
-  return `🤔 Great question about **\"${query}\"**!\n\nOur full AI knowledge base with RAG-powered explanations is being built in Phase 5. Once live, I'll provide detailed, source-cited answers to every insurance question.\n\n👉 In the meantime, try our **Recommend** or **Compare** pages to explore real policies!`;
+  return `I understand you're asking about **"${query}"**.\n\nCurrently, I am in Phase 2 stub mode. Comprehensive AI answers with RAG-based context parsing will be available in Phase 5.\n\nIn the meantime, feel free to use the Recommend or Compare tools!`;
 }

@@ -1,0 +1,417 @@
+﻿
+> frontend@0.1.0 build
+> next build
+
+node.exe : ΓÜá 
+Warning: Next.js 
+inferred your 
+workspace root, 
+but it may not be 
+correct.
+At line:1 char:1
++ & "C:\Program Fil
+es\nodejs/node.exe"
+ "C:\Program Files\
+nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+    + CategoryInfo 
+             : No  
+  tSpecified: (Γ   
+ Üá Warning: Ne    
+...not be corr    
+ect.:String) [    
+], RemoteExcep    
+tion
+    + FullyQualifi 
+   edErrorId : Na  
+  tiveCommandErr   
+ or
+ 
+ We detected 
+multiple lockfiles 
+and selected the 
+directory of D:\Pro
+jects\2026\PolicWis
+e-AI-System\policyw
+ise-ai\package-lock
+.json as the root 
+directory.
+ To silence this 
+warning, set 
+`turbopack.root` 
+in your Next.js 
+config, or 
+consider removing 
+one of the 
+lockfiles if it's 
+not needed.
+   See https://next
+js.org/docs/app/api
+-reference/config/n
+ext-config-js/turbo
+pack#root-directory
+ for more 
+information.
+ Detected 
+additional 
+lockfiles: 
+   * D:\Projects\20
+26\PolicWise-AI-Sys
+tem\policywise-ai\f
+rontend\package-loc
+k.json
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Error: Can't 
+resolve 'tailwindcs
+s-animate' in 'D:\P
+rojects\2026\PolicW
+ise-AI-System\polic
+ywise-ai\frontend\s
+rc\app'
+    [2m[at finishW
+ithoutResolve (D:\P
+rojects\2026\PolicW
+ise-AI-System\polic
+ywise-ai\frontend\n
+ode_modules\enhance
+d-resolve\lib\Resol
+ver.js:586:18)][0m
+    [2m[at D:\Proj
+ects\2026\PolicWise
+-AI-System\policywi
+se-ai\frontend\node
+_modules\enhanced-r
+esolve\lib\Resolver
+.js:678:14][0m
+    [2m[at D:\Proj
+ects\2026\PolicWise
+-AI-System\policywi
+se-ai\frontend\node
+_modules\enhanced-r
+esolve\lib\Resolver
+.js:739:5][0m
+    [2m[at eval 
+(eval at create (D:
+\Projects\2026\Poli
+cWise-AI-System\pol
+icywise-ai\frontend
+\node_modules\tapab
+le\lib\HookCodeFact
+ory.js:31:10), <ano
+nymous>:15:1)][0m
+    [2m[at D:\Proj
+ects\2026\PolicWise
+-AI-System\policywi
+se-ai\frontend\node
+_modules\enhanced-r
+esolve\lib\Resolver
+.js:739:5][0m
+    [2m[at eval 
+(eval at create (D:
+\Projects\2026\Poli
+cWise-AI-System\pol
+icywise-ai\frontend
+\node_modules\tapab
+le\lib\HookCodeFact
+ory.js:31:10), <ano
+nymous>:27:1)][0m
+    [2m[at D:\Proj
+ects\2026\PolicWise
+-AI-System\policywi
+se-ai\frontend\node
+_modules\enhanced-r
+esolve\lib\Descript
+ionFilePlugin.js:89
+:43][0m
+    [2m[at D:\Proj
+ects\2026\PolicWise
+-AI-System\policywi
+se-ai\frontend\node
+_modules\enhanced-r
+esolve\lib\Resolver
+.js:739:5][0m
+    [2m[at eval 
+(eval at create (D:
+\Projects\2026\Poli
+cWise-AI-System\pol
+icywise-ai\frontend
+\node_modules\tapab
+le\lib\HookCodeFact
+ory.js:31:10), <ano
+nymous>:15:1)][0m
+    [2m[at D:\Proj
+ects\2026\PolicWise
+-AI-System\policywi
+se-ai\frontend\node
+_modules\enhanced-r
+esolve\lib\Resolver
+.js:739:5][0m {
+  details: 
+"resolve 'tailwindc
+ss-animate' in 'D:\
+\Projects\\2026\\Po
+licWise-AI-System\\
+policywise-ai\\fron
+tend\\src\\app'\n" 
++
+    '  Parsed 
+request is a 
+module\n' +
+    '  using 
+description file: D
+:\\Projects\\2026\\
+PolicWise-AI-System
+\\policywise-ai\\fr
+ontend\\package.jso
+n (relative path: 
+./src/app)\n' +
+    '    resolve 
+as module\n' +
+    "      D:\\Proj
+ects\\2026\\PolicWi
+se-AI-System\\polic
+ywise-ai\\frontend\
+\src\\app\\node_mod
+ules doesn't exist 
+or is not a 
+directory\n" +
+    "      D:\\Proj
+ects\\2026\\PolicWi
+se-AI-System\\polic
+ywise-ai\\frontend\
+\src\\node_modules 
+doesn't exist or 
+is not a 
+directory\n" +
+    '      looking 
+for modules in D:\\
+Projects\\2026\\Pol
+icWise-AI-System\\p
+olicywise-ai\\front
+end\\node_modules\n
+' +
+    '        
+single file 
+module\n' +
+    '          
+using description 
+file: D:\\Projects\
+\2026\\PolicWise-AI
+-System\\policywise
+-ai\\frontend\\pack
+age.json (relative 
+path: ./node_module
+s/tailwindcss-anima
+te)\n' +
+    '            
+no extension\n' +
+    "              
+D:\\Projects\\2026\
+\PolicWise-AI-Syste
+m\\policywise-ai\\f
+rontend\\node_modul
+es\\tailwindcss-ani
+mate doesn't 
+exist\n" +
+    '            
+.js\n' +
+    "              
+D:\\Projects\\2026\
+\PolicWise-AI-Syste
+m\\policywise-ai\\f
+rontend\\node_modul
+es\\tailwindcss-ani
+mate.js doesn't 
+exist\n" +
+    '            
+.json\n' +
+    "              
+D:\\Projects\\2026\
+\PolicWise-AI-Syste
+m\\policywise-ai\\f
+rontend\\node_modul
+es\\tailwindcss-ani
+mate.json doesn't 
+exist\n" +
+    '            
+.node\n' +
+    "              
+D:\\Projects\\2026\
+\PolicWise-AI-Syste
+m\\policywise-ai\\f
+rontend\\node_modul
+es\\tailwindcss-ani
+mate.node doesn't 
+exist\n" +
+    '            
+.ts\n' +
+    "              
+D:\\Projects\\2026\
+\PolicWise-AI-Syste
+m\\policywise-ai\\f
+rontend\\node_modul
+es\\tailwindcss-ani
+mate.ts doesn't 
+exist\n" +
+    "        D:\\Pr
+ojects\\2026\\Polic
+Wise-AI-System\\pol
+icywise-ai\\fronten
+d\\node_modules\\ta
+ilwindcss-animate 
+doesn't exist\n" +
+    "      D:\\Proj
+ects\\2026\\PolicWi
+se-AI-System\\polic
+ywise-ai\\node_modu
+les doesn't exist 
+or is not a 
+directory\n" +
+    "      D:\\Proj
+ects\\2026\\PolicWi
+se-AI-System\\node_
+modules doesn't 
+exist or is not a 
+directory\n" +
+    "      D:\\Proj
+ects\\2026\\node_mo
+dules doesn't 
+exist or is not a 
+directory\n" +
+    "      D:\\Proj
+ects\\node_modules 
+doesn't exist or 
+is not a 
+directory\n" +
+    "      
+D:\\node_modules 
+doesn't exist or 
+is not a directory"
+}
+
+> Build error 
+occurred
+Error: Turbopack 
+build failed with 
+1 errors:
+./frontend/src/app/
+globals.css
+Error evaluating 
+Node.js code
+CssSyntaxError: 
+tailwindcss: D:\Pro
+jects\2026\PolicWis
+e-AI-System\policyw
+ise-ai\frontend\src
+\app\globals.css:1:
+1: Can't resolve 't
+ailwindcss-animate'
+ in 'D:\Projects\20
+26\PolicWise-AI-Sys
+tem\policywise-ai\f
+rontend\src\app'
+    at Input.error 
+(frontend/node_modu
+les/postcss/lib/inp
+ut.js:135:16) [D:\P
+rojects\2026\PolicW
+ise-AI-System\polic
+ywise-ai\frontend\.
+next\build\chunks\9
+e883_174fdf60._.js:
+4651:22]
+    at Root.error (
+frontend/node_modul
+es/postcss/lib/node
+.js:146:32) [D:\Pro
+jects\2026\PolicWis
+e-AI-System\policyw
+ise-ai\frontend\.ne
+xt\build\chunks\9e8
+83_174fdf60._.js:92
+8:38]
+    [at 
+Object.Once (D:\Pro
+jects\2026\PolicWis
+e-AI-System\policyw
+ise-ai\frontend\nod
+e_modules\@tailwind
+css\postcss\dist\in
+dex.js:10:6913)]
+    at async LazyRe
+sult.runAsync (fron
+tend/node_modules/p
+ostcss/lib/lazy-res
+ult.js:293:11) [D:\
+Projects\2026\Polic
+Wise-AI-System\poli
+cywise-ai\frontend\
+.next\build\chunks\
+9e883_174fdf60._.js
+:6214:21]
+    at async 
+transform (turbopac
+k:///[turbopack-nod
+e]/transforms/postc
+ss.ts:70:34) [D:\Pr
+ojects\2026\PolicWi
+se-AI-System\policy
+wise-ai\frontend\.n
+ext\build\chunks\[r
+oot-of-the-server]_
+_188e9cb8._.js:146:
+36]
+    at async run (t
+urbopack:///[turbop
+ack-node]/ipc/evalu
+ate.ts:92:23) [D:\P
+rojects\2026\PolicW
+ise-AI-System\polic
+ywise-ai\frontend\.
+next\build\chunks\[
+root-of-the-server]
+__3b54a99d._.js:443
+:31]
+
+Import trace:
+  Client Component 
+Browser:
+    ./frontend/src/
+app/globals.css 
+[Client Component 
+Browser]
+    ./frontend/src/
+app/layout.tsx 
+[Server Component]
+
+
+    at async 
+transform (turbopac
+k:///[turbopack-nod
+e]/transforms/postc
+ss.ts:70:34) [D:\Pr
+ojects\2026\PolicWi
+se-AI-System\policy
+wise-ai\frontend\.n
+ext\build\chunks\[r
+oot-of-the-server]_
+_188e9cb8._.js:146:
+36])
+    at async run (t
+urbopack:///[turbop
+ack-node]/ipc/evalu
+ate.ts:92:23) [D:\P
+rojects\2026\PolicW
+ise-AI-System\polic
+ywise-ai\frontend\.
+next\build\chunks\[
+root-of-the-server]
+__3b54a99d._.js:443
+:31])

@@ -1,252 +1,148 @@
 /**
  * app/page.tsx — Landing Page
- * Hero, feature cards, stats, and CTAs.
+ * Modern SaaS Hero with quick input, trust indicators, and feature cards.
  */
 
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { MessageSquare, Target, BarChart3, ShieldCheck, Zap, ArrowRight } from "lucide-react";
 
 const features = [
   {
-    icon: "🤖",
-    title: "AI Insurance Assistant",
-    description:
-      "Ask any question about car insurance — Zero Depreciation, NCB, IDV — and get clear, simple explanations powered by AI.",
+    icon: <MessageSquare size={24} className="text-emerald-600" />,
+    title: "AI Chat Assistant",
+    description: "Instant clarity on add-ons, IDV, and NCB without reading 50-page PDFs.",
     href: "/chat",
-    cta: "Ask AI →",
+    bg: "bg-emerald-100",
   },
   {
-    icon: "🎯",
-    title: "Smart Recommendations",
-    description:
-      "Tell us your car, city, and budget. Our engine finds policies perfectly matched to your needs — ranked by claim settlement ratio.",
+    icon: <Target size={24} className="text-teal-600" />,
+    title: "Smart Matching",
+    description: "Tell us your car and budget. We'll automatically filter the top 3 best policies.",
     href: "/recommend",
-    cta: "Get Recommended →",
+    bg: "bg-teal-100",
   },
   {
-    icon: "⚖️",
-    title: "Policy Comparison",
-    description:
-      "Browse all insurers side by side. Filter by budget, coverage type, and claim ratio. Pick the best policy with confidence.",
+    icon: <BarChart3 size={24} className="text-teal-600" />,
+    title: "Side-by-Side Compare",
+    description: "Visually highlight the differences in coverage and claim settlement ratios.",
     href: "/compare",
-    cta: "Compare Policies →",
+    bg: "bg-teal-100",
   },
-];
-
-const stats = [
-  { value: "20+", label: "Insurance Policies" },
-  { value: "98%", label: "Claim Accuracy Tracked" },
-  { value: "5 sec", label: "Recommendation Time" },
-  { value: "AI", label: "Powered Explanations" },
 ];
 
 export default function LandingPage() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/chat?q=${encodeURIComponent(query)}`);
+    }
+  };
+
   return (
-    <main style={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}>
-      {/* Decorative orbs */}
-      <div
-        className="orb orb-indigo"
-        style={{ width: 600, height: 600, top: -200, left: -100 }}
-      />
-      <div
-        className="orb orb-blue"
-        style={{ width: 400, height: 400, top: 100, right: -100 }}
-      />
+    <main className="min-h-screen relative overflow-hidden bg-slate-50">
+      {/* Background Gradients */}
+      <div className="absolute top-0 inset-x-0 h-screen bg-gradient-to-b from-emerald-50/80 via-white to-white pointer-events-none -z-10" />
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-emerald-200/40 blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-teal-200/30 blur-[120px] pointer-events-none -z-10" />
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          paddingTop: "160px",
-          paddingBottom: "100px",
-          textAlign: "center",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        <div className="container-main">
-          {/* Chip */}
-          <div
-            className="animate-fade-up badge badge-purple"
-            style={{ display: "inline-flex", marginBottom: "24px", fontSize: "0.8rem", padding: "6px 14px" }}
-          >
-            🚀 Phase 2 Backend Live — AI Coming in Phase 5
-          </div>
-
-          {/* Heading */}
-          <h1
-            className="animate-fade-up delay-100"
-            style={{
-              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-              fontWeight: 900,
-              lineHeight: 1.1,
-              marginBottom: "24px",
-            }}
-          >
-            Understand Insurance,{" "}
-            <span className="gradient-text">The Smart Way</span>
-          </h1>
-
-          {/* Subheading */}
-          <p
-            className="animate-fade-up delay-200"
-            style={{
-              fontSize: "clamp(1rem, 2vw, 1.25rem)",
-              color: "var(--text-muted)",
-              maxWidth: "600px",
-              margin: "0 auto 40px",
-              lineHeight: 1.7,
-            }}
-          >
-            PolicyWise AI demystifies car insurance with an AI assistant,
-            smart recommendations, and side-by-side policy comparison — all in one place.
-          </p>
-
-          {/* CTA buttons */}
-          <div
-            className="animate-fade-up delay-300"
-            style={{
-              display: "flex",
-              gap: "16px",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <Link href="/recommend" className="btn-primary" style={{ padding: "14px 30px", fontSize: "1rem" }}>
-              🎯 Get My Recommendation
-            </Link>
-            <Link href="/chat" className="btn-secondary" style={{ padding: "14px 30px", fontSize: "1rem" }}>
-              🤖 Ask AI Assistant
-            </Link>
-          </div>
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100/80 text-emerald-700 text-sm font-semibold mb-8 border border-emerald-200 shadow-sm animate-fade-in">
+          <Zap size={16} className="text-emerald-500 fill-emerald-500" />
+          <span>Phase 2 Live — AI Upgrades Coming Next</span>
         </div>
-      </section>
 
-      {/* ── Stats Bar ────────────────────────────────────────────────── */}
-      <section style={{ padding: "0 0 80px", position: "relative", zIndex: 1 }}>
-        <div className="container-main">
-          <div
-            className="glass animate-fade-up delay-400"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "0",
-              borderRadius: "16px",
-              overflow: "hidden",
-            }}
-          >
-            {stats.map((stat, i) => (
-              <div
-                key={stat.label}
-                style={{
-                  padding: "32px 24px",
-                  textAlign: "center",
-                  borderRight: i < stats.length - 1 ? "1px solid var(--glass-border)" : "none",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "2rem",
-                    fontWeight: 800,
-                    background: "var(--grad-brand)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    marginBottom: "4px",
-                  }}
-                >
-                  {stat.value}
-                </p>
-                <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{stat.label}</p>
-              </div>
-            ))}
+        {/* Heading */}
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight text-slate-900 mb-6 max-w-4xl animate-fade-up">
+          Understand Car Insurance, <br className="hidden md:block" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+            The Smart Way.
+          </span>
+        </h1>
+
+        {/* Subheading */}
+        <p className="text-lg md:text-xl text-slate-600 max-w-2xl mb-10 animate-fade-up" style={{ animationDelay: '100ms' }}>
+          Stop guessing with complex legal jargon. Use AI to simply understand, compare, and get perfect coverage recommendations for your car.
+        </p>
+
+        {/* Floating Search / Action Box */}
+        <div className="w-full max-w-2xl bg-white p-2.5 rounded-2xl shadow-xl shadow-emerald-100 border border-slate-200 flex flex-col sm:flex-row items-center gap-3 animate-fade-up" style={{ animationDelay: '200ms' }}>
+          <form onSubmit={handleSearch} className="flex-1 w-full flex items-center">
+            <MessageSquare className="w-5 h-5 text-slate-400 ml-3 mr-2" />
+            <Input 
+              type="text"
+              placeholder="E.g. What does Zero Depreciation actually cover?"
+              className="border-0 shadow-none focus-visible:ring-0 text-base h-12 w-full"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <Button type="submit" size="lg" className="hidden sm:flex bg-emerald-600 hover:bg-emerald-700 h-12 px-6 rounded-xl font-semibold">
+              Ask AI
+            </Button>
+          </form>
+        </div>
+        <Button onClick={handleSearch} size="lg" className="w-full max-w-2xl mt-3 sm:hidden bg-emerald-600 hover:bg-emerald-700 h-12 rounded-xl font-semibold animate-fade-up" style={{ animationDelay: '200ms' }}>
+          Ask AI
+        </Button>
+
+        {/* Trust Indicators */}
+        <div className="mt-16 pt-8 border-t border-slate-200 w-full max-w-3xl flex flex-wrap justify-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300 animate-fade-in" style={{ animationDelay: '400ms' }}>
+          <div className="flex items-center gap-2 font-semibold text-slate-700">
+            <ShieldCheck size={20} className="text-emerald-600" />
+            IRDAI Compliant Data
+          </div>
+          <div className="flex items-center gap-2 font-semibold text-slate-700">
+            <Target size={20} className="text-teal-600" />
+            98% Accuracy
+          </div>
+          <div className="flex items-center gap-2 font-semibold text-slate-700">
+            <Zap size={20} className="text-amber-500" />
+            Real-time Comparisons
           </div>
         </div>
       </section>
 
       {/* ── Feature Cards ─────────────────────────────────────────────── */}
-      <section style={{ padding: "0 0 120px", position: "relative", zIndex: 1 }}>
-        <div className="container-main">
-          <div style={{ textAlign: "center", marginBottom: "60px" }}>
-            <h2
-              style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", marginBottom: "12px" }}
-              className="animate-fade-up"
-            >
-              Everything You Need to Choose{" "}
-              <span className="gradient-text">the Right Policy</span>
-            </h2>
-            <p style={{ color: "var(--text-muted)", maxWidth: "500px", margin: "0 auto" }} className="animate-fade-up delay-100">
-              Three powerful tools to guide your insurance decisions from understanding to purchase.
-            </p>
-          </div>
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white rounded-[3rem] shadow-sm border border-slate-100 mb-20">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">
+            Everything you need for the right policy.
+          </h2>
+          <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+            Three powerful tools working together to guide your insurance decisions from research to purchase.
+          </p>
+        </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: "24px",
-            }}
-          >
-            {features.map((feature, i) => (
-              <Link
-                key={feature.title}
-                href={feature.href}
-                style={{ textDecoration: "none" }}
-              >
-                <div
-                  className={`glass-card animate-fade-up delay-${(i + 1) * 100}`}
-                  style={{
-                    padding: "32px",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "16px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: "14px",
-                      background: "var(--grad-brand)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "26px",
-                    }}
-                  >
+        <div className="grid md:grid-cols-3 gap-8">
+          {features.map((feature, i) => (
+            <Link key={i} href={feature.href} className="group">
+              <Card className="h-full border-slate-100 bg-slate-50/50 hover:bg-white transition-all duration-300 hover:shadow-xl hover:shadow-emerald-100/50 hover:-translate-y-1">
+                <CardHeader>
+                  <div className={`w-12 h-12 rounded-xl ${feature.bg} flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
                     {feature.icon}
                   </div>
-
-                  <div>
-                    <h3
-                      style={{
-                        fontSize: "1.1rem",
-                        fontWeight: 700,
-                        color: "var(--text-primary)",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      {feature.title}
-                    </h3>
-                    <p style={{ fontSize: "0.875rem", lineHeight: 1.6 }}>
-                      {feature.description}
-                    </p>
+                  <h3 className="text-xl font-heading font-bold text-slate-900">{feature.title}</h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-600 mb-6">{feature.description}</p>
+                  <div className="flex items-center text-emerald-600 font-semibold group-hover:text-emerald-700">
+                    Try it now <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
                   </div>
-
-                  <div style={{ marginTop: "auto" }}>
-                    <span
-                      style={{
-                        fontSize: "0.875rem",
-                        fontWeight: 600,
-                        color: "var(--accent-blue)",
-                      }}
-                    >
-                      {feature.cta}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
         </div>
       </section>
     </main>

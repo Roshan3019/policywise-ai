@@ -1,0 +1,3 @@
+src/app/explore/page.tsx(66,22): error TS2322: Type '{ children: Element[]; type: string; collapsible: true; className: string; }' is not assignable to type 'IntrinsicAttributes & Props<any>'.
+  Property 'type' does not exist on type 'IntrinsicAttributes & Props<any>'.
+src/app/recommend/page.tsx(166,42): error TS2488: Type 'number | readonly number[]' must have a '[Symbol.iterator]()' method that returns an iterator.

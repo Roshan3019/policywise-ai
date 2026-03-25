@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import type { Policy } from "@/lib/types";
-import PolicyTypeBadge from "./Badge";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, Shield, Info } from "lucide-react";
 
 interface PolicyCardProps {
   policy: Policy;
@@ -17,187 +19,92 @@ function formatCurrency(amount: number): string {
 }
 
 export default function PolicyCard({ policy, onSelect, isSelected }: PolicyCardProps) {
-  const maxRatio = 100;
   const ratio = policy.claim_settlement_ratio ?? 0;
 
   return (
-    <div
-      className="glass-card"
-      style={{
-        padding: "24px",
-        position: "relative",
-        cursor: onSelect ? "pointer" : "default",
-        border: isSelected
-          ? "1px solid rgba(99,102,241,0.6)"
-          : "1px solid var(--glass-border)",
-        boxShadow: isSelected ? "var(--shadow-glow)" : "var(--shadow-md)",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-      }}
+    <Card 
       onClick={() => onSelect?.(policy)}
+      className={`relative cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 ${
+        isSelected ? 'ring-2 ring-emerald-600 bg-emerald-50/10' : 'border-slate-200 bg-white'
+      }`}
     >
-      {/* Selected checkmark */}
       {isSelected && (
-        <div
-          style={{
-            position: "absolute",
-            top: "12px",
-            right: "12px",
-            width: 24,
-            height: 24,
-            borderRadius: "50%",
-            background: "var(--grad-brand)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "12px",
-            color: "white",
-          }}
-        >
-          ✓
+        <div className="absolute -top-3 -right-3 w-7 h-7 bg-emerald-600 rounded-full flex items-center justify-center text-white shadow-sm border-2 border-white z-10">
+          <CheckCircle2 size={16} />
         </div>
       )}
 
-      {/* Header */}
-      <div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-          <PolicyTypeBadge type={policy.policy_type} />
+      <CardHeader className="pb-3">
+        <div className="flex justify-between items-start mb-2">
+          <Badge variant="secondary" className="bg-slate-100 text-slate-700 font-medium">
+            {policy.policy_type.replace('_', ' ').toUpperCase()}
+          </Badge>
+          <Shield size={18} className="text-slate-400" />
         </div>
-        <h3
-          style={{
-            fontSize: "1rem",
-            fontWeight: 700,
-            color: "var(--text-primary)",
-            marginBottom: "2px",
-            lineHeight: 1.3,
-          }}
-        >
+        <h3 className="font-heading text-lg font-bold text-slate-900 leading-tight">
           {policy.name}
         </h3>
-        <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
-          {policy.insurer_name}
-        </p>
-      </div>
+        <p className="text-sm text-slate-500 font-medium">{policy.insurer_name}</p>
+      </CardHeader>
 
-      {/* Premium & Coverage */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "12px",
-        }}
-      >
-        <div
-          style={{
-            background: "rgba(59,130,246,0.07)",
-            borderRadius: "8px",
-            padding: "12px",
-          }}
-        >
-          <p style={{ fontSize: "0.7rem", color: "var(--text-subtle)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Annual Premium
-          </p>
-          <p style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)" }}>
-            {formatCurrency(policy.premium_min)}
-            <span style={{ color: "var(--text-muted)", fontWeight: 400 }}> – </span>
-            {formatCurrency(policy.premium_max)}
-          </p>
-        </div>
-
-        <div
-          style={{
-            background: "rgba(99,102,241,0.07)",
-            borderRadius: "8px",
-            padding: "12px",
-          }}
-        >
-          <p style={{ fontSize: "0.7rem", color: "var(--text-subtle)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Coverage (IDV)
-          </p>
-          <p style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)" }}>
-            {formatCurrency(policy.coverage_amount)}
-          </p>
-        </div>
-      </div>
-
-      {/* Claim Settlement Ratio */}
-      {policy.claim_settlement_ratio != null && (
-        <div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "6px",
-            }}
-          >
-            <p style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-              Claim Settlement
-            </p>
-            <p
-              style={{
-                fontSize: "0.85rem",
-                fontWeight: 700,
-                color: ratio >= 95 ? "#4ade80" : ratio >= 85 ? "#fbbf24" : "#f87171",
-              }}
-            >
-              {ratio}%
+      <CardContent className="pb-4">
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
+            <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Premium</p>
+            <p className="font-bold text-slate-900">
+              {formatCurrency(policy.premium_min)}
+              <span className="text-slate-400 font-normal"> - </span>
+              {formatCurrency(policy.premium_max)}
             </p>
           </div>
-          <div className="ratio-bar-track">
-            <div
-              className="ratio-bar-fill"
-              style={{ width: `${(ratio / maxRatio) * 100}%` }}
-            />
+          <div className="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100/50">
+            <p className="text-[10px] uppercase tracking-wider text-emerald-500 font-semibold mb-1">Coverage (IDV)</p>
+            <p className="font-bold text-emerald-900">
+              {formatCurrency(policy.coverage_amount)}
+            </p>
           </div>
         </div>
-      )}
 
-      {/* Add-ons */}
-      {policy.add_ons && policy.add_ons.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          {policy.add_ons.slice(0, 3).map((addon) => (
-            <span
-              key={addon}
-              style={{
-                fontSize: "0.7rem",
-                padding: "3px 8px",
-                borderRadius: "4px",
-                background: "rgba(255,255,255,0.05)",
-                color: "var(--text-muted)",
-                border: "1px solid var(--glass-border)",
-              }}
-            >
-              {addon}
-            </span>
-          ))}
-          {policy.add_ons.length > 3 && (
-            <span
-              style={{
-                fontSize: "0.7rem",
-                padding: "3px 8px",
-                borderRadius: "4px",
-                color: "var(--accent-blue)",
-              }}
-            >
-              +{policy.add_ons.length - 3} more
-            </span>
-          )}
-        </div>
-      )}
+        {policy.claim_settlement_ratio != null && (
+          <div className="mb-2">
+            <div className="flex justify-between items-center mb-1.5">
+              <span className="text-xs font-semibold text-slate-500">Claim Settlement</span>
+              <span className={`text-xs font-bold ${ratio >= 95 ? 'text-emerald-600' : ratio >= 85 ? 'text-amber-500' : 'text-red-500'}`}>
+                {ratio}%
+              </span>
+            </div>
+            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out" 
+                style={{ width: `${ratio}%` }}
+              />
+            </div>
+          </div>
+        )}
 
-      {/* Footer */}
-      <div style={{ display: "flex", gap: "8px", marginTop: "auto" }}>
-        <Link
-          href={`/compare/${policy.id}`}
-          className="btn-secondary"
-          style={{ flex: 1, justifyContent: "center", padding: "9px 12px", fontSize: "0.8rem" }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          View Details
+        {policy.add_ons && policy.add_ons.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {policy.add_ons.slice(0, 3).map((addon) => (
+              <span key={addon} className="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200 font-medium">
+                {addon}
+              </span>
+            ))}
+            {policy.add_ons.length > 3 && (
+              <span className="text-[10px] px-2 py-0.5 text-emerald-600 font-semibold">
+                +{policy.add_ons.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
+      </CardContent>
+
+      <CardFooter className="pt-0">
+        <Link href={`/compare/${policy.id}`} className="w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full py-2 flex items-center justify-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-emerald-600 hover:bg-slate-50 rounded-md transition-colors border border-transparent hover:border-slate-200">
+            <Info size={14} /> View Details
+          </div>
         </Link>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

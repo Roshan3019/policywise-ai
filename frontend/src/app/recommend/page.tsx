@@ -1,22 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import PolicyCard from "@/components/PolicyCard";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { getRecommendations } from "@/lib/api";
 import type { Policy, PolicyType, RecommendationRequest } from "@/lib/types";
-
-const COVERAGE_OPTIONS: { value: PolicyType | ""; label: string }[] = [
-  { value: "", label: "Any Coverage" },
-  { value: "comprehensive", label: "Comprehensive" },
-  { value: "third_party", label: "Third Party" },
-  { value: "standalone_od", label: "Standalone OD" },
-];
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Car, MapPin, Wallet, ArrowRight, ArrowLeft, Loader2, Sparkles } from "lucide-react";
 
 export default function RecommendPage() {
-  const router = useRouter();
-
+  const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     car_model: "",
     city: "",
@@ -31,8 +27,10 @@ export default function RecommendPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleNext = () => setStep((s) => Math.min(s + 1, 3));
+  const handleBack = () => setStep((s) => Math.max(s - 1, 1));
+
+  const handleSubmit = async () => {
     setIsLoading(true);
     setError("");
     setSubmitted(false);
@@ -51,205 +49,213 @@ export default function RecommendPage() {
       setMessage(response.message);
       setSubmitted(true);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to get recommendations. Is the backend running?";
-      setError(msg);
+      setError(err instanceof Error ? err.message : "Failed to get recommendations.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <main style={{ minHeight: "100vh", paddingTop: "88px", paddingBottom: "80px", position: "relative" }}>
-      {/* Orbs */}
-      <div className="orb orb-indigo" style={{ width: 500, height: 500, top: -100, right: -150, opacity: 0.2 }} />
+  const progressValue = submitted ? 100 : (step / 3) * 100;
 
-      <div className="container-main">
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "48px" }} className="animate-fade-up">
-          <div className="badge badge-blue" style={{ display: "inline-flex", marginBottom: "16px" }}>
-            🎯 Smart Recommendations
-          </div>
-          <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", marginBottom: "12px" }}>
-            Find Your{" "}
-            <span className="gradient-text">Perfect Policy</span>
+  return (
+    <main className="min-h-screen pt-24 pb-20 px-4 flex flex-col items-center bg-slate-50 relative overflow-hidden">
+      {/* Decorative */}
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-teal-300/20 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-emerald-300/20 blur-[100px] rounded-full pointer-events-none" />
+
+      <div className="w-full max-w-4xl z-10">
+        <div className="text-center mb-10 animate-fade-up">
+          <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-slate-900 mb-4 tracking-tight">
+            Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Perfect Match</span>
           </h1>
-          <p style={{ color: "var(--text-muted)", maxWidth: "500px", margin: "0 auto" }}>
-            Tell us about yourself and we&apos;ll match you with top-rated insurance policies.
+          <p className="text-slate-600 text-lg max-w-xl mx-auto">
+            Answer a few quick questions and our AI will recommend the top policies tailored to your needs.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: submitted ? "380px 1fr" : "1fr",
-            gap: "32px",
-            maxWidth: submitted ? "100%" : "600px",
-            margin: "0 auto",
-            transition: "all 0.4s ease",
-          }}
-        >
-          {/* Form */}
-          <div className="glass-card animate-fade-up delay-100" style={{ padding: "36px" }}>
-            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "28px" }}>
-              Your Preferences
-            </h2>
-
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        {/* Wizard Container */}
+        {!submitted ? (
+          <div className="bg-white rounded-[2rem] shadow-xl shadow-emerald-100/40 border border-slate-100 p-8 md:p-12 max-w-2xl mx-auto relative overflow-hidden animate-fade-up" style={{ animationDelay: '100ms' }}>
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-100">
+              <div 
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500 ease-out"
+                style={{ width: `${progressValue}%` }}
+              />
+            </div>
+            
+            <div className="mb-8 flex items-center justify-between">
               <div>
-                <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", display: "block", marginBottom: "8px" }}>
-                  Car Model
-                </label>
-                <input
-                  id="car-model-input"
-                  className="input-field"
-                  placeholder="e.g. Maruti Swift, Honda City"
-                  value={form.car_model}
-                  onChange={(e) => setForm((f) => ({ ...f, car_model: e.target.value }))}
-                />
+                <span className="text-sm font-bold text-emerald-600 uppercase tracking-widest block mb-1">Step {step} of 3</span>
+                <h2 className="text-2xl font-heading font-bold text-slate-900">
+                  {step === 1 && "Vehicle Details"}
+                  {step === 2 && "Location & Usage"}
+                  {step === 3 && "Coverage & Budget"}
+                </h2>
               </div>
-
-              <div>
-                <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", display: "block", marginBottom: "8px" }}>
-                  City of Registration
-                </label>
-                <input
-                  id="city-input"
-                  className="input-field"
-                  placeholder="e.g. Mumbai, Delhi, Bengaluru"
-                  value={form.city}
-                  onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
-                />
+              <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                {step === 1 && <Car />}
+                {step === 2 && <MapPin />}
+                {step === 3 && <Wallet />}
               </div>
+            </div>
 
-              <div>
-                <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", display: "block", marginBottom: "8px" }}>
-                  Coverage Preference
-                </label>
-                <select
-                  id="coverage-select"
-                  className="select-field"
-                  value={form.coverage_preference}
-                  onChange={(e) => setForm((f) => ({ ...f, coverage_preference: e.target.value as PolicyType | "" }))}
-                >
-                  {COVERAGE_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-                  <label style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Budget Range</label>
-                  <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-primary)" }}>
-                    ₹{form.budget_min.toLocaleString()} – ₹{form.budget_max.toLocaleString()}
-                  </span>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <span style={{ fontSize: "0.75rem", color: "var(--text-subtle)", width: "32px" }}>Min</span>
-                    <input
-                      id="budget-min-slider"
-                      type="range"
-                      min={1000}
-                      max={50000}
-                      step={1000}
-                      value={form.budget_min}
-                      onChange={(e) =>
-                        setForm((f) => ({
-                          ...f,
-                          budget_min: Math.min(Number(e.target.value), f.budget_max - 1000),
-                        }))
-                      }
+            <div className="min-h-[220px]">
+              {step === 1 && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">Car Make & Model</label>
+                    <Input 
+                      placeholder="e.g. Maruti Swift VXi" 
+                      value={form.car_model}
+                      onChange={(e) => setForm(f => ({ ...f, car_model: e.target.value }))}
+                      className="h-12 bg-slate-50 border-slate-200 focus-visible:ring-emerald-500 text-lg px-4"
                     />
+                    <p className="text-xs text-slate-500">The specific model helps determine intrinsic value (IDV).</p>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <span style={{ fontSize: "0.75rem", color: "var(--text-subtle)", width: "32px" }}>Max</span>
-                    <input
-                      id="budget-max-slider"
-                      type="range"
-                      min={1000}
-                      max={100000}
-                      step={1000}
-                      value={form.budget_max}
-                      onChange={(e) =>
-                        setForm((f) => ({
-                          ...f,
-                          budget_max: Math.max(Number(e.target.value), f.budget_min + 1000),
-                        }))
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {error && (
-                <div
-                  style={{
-                    padding: "12px 16px",
-                    background: "rgba(248,113,113,0.1)",
-                    border: "1px solid rgba(248,113,113,0.25)",
-                    borderRadius: "8px",
-                    color: "#f87171",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  ⚠️ {error}
                 </div>
               )}
 
-              <button
-                id="recommend-submit-btn"
-                type="submit"
-                className="btn-primary"
-                disabled={isLoading}
-                style={{ width: "100%", justifyContent: "center", padding: "14px" }}
-              >
-                {isLoading ? "Finding policies..." : "🎯 Get My Recommendations"}
-              </button>
-            </form>
-          </div>
-
-          {/* Results */}
-          {submitted && (
-            <div className="animate-fade-up">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2 style={{ fontSize: "1.1rem", fontWeight: 700 }}>
-                  {results.length > 0
-                    ? `${results.length} Matching Policies`
-                    : "No Matches Found"}
-                </h2>
-                <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{message}</p>
-              </div>
-
-              {isLoading ? (
-                <LoadingSpinner label="Finding best policies..." />
-              ) : results.length === 0 ? (
-                <div
-                  className="glass"
-                  style={{ padding: "48px", textAlign: "center" }}
-                >
-                  <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔍</div>
-                  <h3 style={{ marginBottom: "8px" }}>No policies matched</h3>
-                  <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
-                    Try broadening your budget range or changing the coverage type.
-                  </p>
+              {step === 2 && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">City of Registration</label>
+                    <Input 
+                      placeholder="e.g. Mumbai, Maharashtra" 
+                      value={form.city}
+                      onChange={(e) => setForm(f => ({ ...f, city: e.target.value }))}
+                      className="h-12 bg-slate-50 border-slate-200 focus-visible:ring-emerald-500 text-lg px-4"
+                    />
+                    <p className="text-xs text-slate-500">Used to estimate risk zones for premium calculation.</p>
+                  </div>
                 </div>
-              ) : (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                    gap: "20px",
-                  }}
-                >
-                  {results.map((policy) => (
-                    <PolicyCard key={policy.id} policy={policy} />
-                  ))}
+              )}
+
+              {step === 3 && (
+                <div className="space-y-8 animate-fade-in">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">Coverage Type</label>
+                    <Select 
+                      value={form.coverage_preference} 
+                      onValueChange={(val) => setForm(f => ({ ...f, coverage_preference: val as PolicyType | "" }))}
+                    >
+                      <SelectTrigger className="h-12 bg-slate-50 border-slate-200 focus:ring-emerald-500 text-base">
+                        <SelectValue placeholder="Any Coverage" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="null">Any Coverage</SelectItem>
+                        <SelectItem value="comprehensive">Comprehensive (Recommended)</SelectItem>
+                        <SelectItem value="third_party">Third Party Only</SelectItem>
+                        <SelectItem value="standalone_od">Standalone Own Damage</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center text-sm font-semibold">
+                      <span className="text-slate-700">Budget Range (₹/year)</span>
+                      <span className="text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
+                        ₹{form.budget_min.toLocaleString()} — ₹{form.budget_max.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="pt-2">
+                       <Slider 
+                         min={1000} 
+                         max={150000} 
+                         step={1000} 
+                         value={[form.budget_max]}
+                         onValueChange={(val) => setForm(f => ({ ...f, budget_max: Array.isArray(val) ? val[0] : (val as unknown as number[])[0] ?? val }))}
+                         className="py-4"
+                       />
+                       <div className="flex justify-between text-xs text-slate-400 font-medium mt-1">
+                         <span>Up to ₹{form.budget_max.toLocaleString()}</span>
+                       </div>
+                    </div>
+                  </div>
+                  
+                  {error && (
+                    <div className="p-3 bg-red-50 text-red-600 border border-red-100 rounded-lg text-sm font-medium">
+                      ⚠️ {error}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          )}
-        </div>
+
+            <div className="mt-10 flex items-center justify-between pt-6 border-t border-slate-100">
+              <Button 
+                variant="ghost" 
+                onClick={handleBack} 
+                disabled={step === 1 || isLoading}
+                className="text-slate-500 font-semibold"
+              >
+                {step > 1 ? <><ArrowLeft className="mr-2 h-4 w-4" /> Back</> : " "}
+              </Button>
+              
+              {step < 3 ? (
+                <Button onClick={handleNext} className="bg-emerald-600 hover:bg-emerald-700 h-11 px-6 font-bold rounded-xl shadow-md shadow-emerald-200">
+                  Next Step <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              ) : (
+                <Button 
+                  onClick={handleSubmit} 
+                  disabled={isLoading}
+                  className="bg-teal-600 hover:bg-teal-700 h-11 px-8 font-bold rounded-xl shadow-md shadow-teal-200"
+                >
+                  {isLoading ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing...</>
+                  ) : (
+                    <><Sparkles className="mr-2 h-4 w-4" /> Get Matches</>
+                  )}
+                </Button>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* Results View */
+          <div className="animate-fade-in">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+              <div>
+                <h2 className="text-2xl font-bold font-heading text-slate-900 flex items-center gap-2">
+                  <Sparkles className="text-emerald-600" size={24} />
+                  Top {results.length} Matches
+                </h2>
+                <p className="text-slate-500 text-sm mt-1">{message || "Based on your vehicle and budget preferences."}</p>
+              </div>
+              <Button variant="outline" onClick={() => setSubmitted(false)} className="font-semibold h-10 border-slate-200 shrink-0">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Edit Preferences
+              </Button>
+            </div>
+
+            {results.length === 0 ? (
+              <div className="bg-white rounded-3xl p-16 text-center border border-slate-100 shadow-sm">
+                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
+                  <Car size={32} />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">No Policies Found</h3>
+                <p className="text-slate-500">We couldn't find any policies matching those exact filters. Try broadening your budget or coverage preferences.</p>
+                <Button variant="outline" onClick={() => setSubmitted(false)} className="mt-6 border-slate-200 font-semibold">
+                  Adjust Filters
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {results.map((policy, idx) => (
+                  <div key={policy.id} className="animate-fade-up" style={{ animationDelay: `${100 * (idx + 1)}ms` }}>
+                    <PolicyCard policy={policy} />
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {results.length > 0 && (
+              <div className="mt-12 text-center">
+                 <Button className="bg-slate-900 hover:bg-slate-800 h-12 px-8 rounded-xl font-bold">
+                   Proceed to Comparison →
+                 </Button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );

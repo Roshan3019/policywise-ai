@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import PolicyTypeBadge from "@/components/Badge";
 import { getPolicy } from "@/lib/api";
 import type { Policy } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, CheckCircle2, ShieldAlert, Sparkles, Building2, Wallet, Target } from "lucide-react";
 
 function formatCurrency(amount: number): string {
   if (amount >= 100000) return `₹${(amount / 100000).toFixed(2)}L`;
@@ -16,7 +18,9 @@ function formatCurrency(amount: number): string {
 export default function PolicyDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const id = Number(params.id);
+  // Ensure id is a string before parsing
+  const idParam = Array.isArray(params.id) ? params.id[0] : params.id;
+  const id = Number(idParam);
 
   const [policy, setPolicy] = useState<Policy | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,22 +43,27 @@ export default function PolicyDetailPage() {
 
   if (isLoading) {
     return (
-      <main style={{ minHeight: "100vh", paddingTop: "88px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <LoadingSpinner size={48} label="Loading policy details..." />
+      <main className="min-h-screen pt-24 pb-20 flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center animate-pulse text-emerald-600">
+          <ShieldAlert size={48} className="mb-4 opacity-50" />
+          <p className="font-semibold text-slate-500">Loading policy details...</p>
+        </div>
       </main>
     );
   }
 
   if (error || !policy) {
     return (
-      <main style={{ minHeight: "100vh", paddingTop: "88px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "56px", marginBottom: "16px" }}>❌</div>
-          <h2 style={{ marginBottom: "8px" }}>Policy Not Found</h2>
-          <p style={{ color: "var(--text-muted)", marginBottom: "24px" }}>{error}</p>
-          <button className="btn-primary" onClick={() => router.push("/compare")}>
-            ← Back to Compare
-          </button>
+      <main className="min-h-screen pt-24 pb-20 flex items-center justify-center bg-slate-50">
+        <div className="text-center max-w-md mx-auto bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <ShieldAlert size={32} />
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Policy Not Found</h2>
+          <p className="text-slate-500 mb-8">{error}</p>
+          <Button onClick={() => router.push("/compare")} className="bg-emerald-600 hover:bg-emerald-700 w-full">
+            Back to Compare
+          </Button>
         </div>
       </main>
     );
@@ -63,130 +72,123 @@ export default function PolicyDetailPage() {
   const ratio = policy.claim_settlement_ratio ?? 0;
 
   return (
-    <main style={{ minHeight: "100vh", paddingTop: "88px", paddingBottom: "80px", position: "relative" }}>
-      {/* Orbs */}
-      <div className="orb orb-blue" style={{ width: 400, height: 400, top: 0, right: -100, opacity: 0.15 }} />
+    <main className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative bg-slate-50 overflow-hidden">
+      {/* Decorative Orbs */}
+      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-teal-200/20 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-[30%] left-[-10%] w-[400px] h-[400px] bg-emerald-200/20 blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="container-main" style={{ maxWidth: "800px" }}>
-        {/* Back */}
-        <button
-          className="btn-secondary"
+      <div className="max-w-4xl mx-auto relative z-10">
+        <Button 
+          variant="ghost" 
           onClick={() => router.back()}
-          style={{ marginBottom: "24px", padding: "8px 16px", fontSize: "0.85rem" }}
+          className="mb-8 text-slate-500 hover:text-slate-900 hover:bg-white border border-transparent hover:border-slate-200 rounded-xl"
         >
-          ← Back
-        </button>
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+        </Button>
 
-        {/* Header card */}
-        <div className="glass-card animate-fade-up" style={{ padding: "36px", marginBottom: "24px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
+        {/* Header Hero Card */}
+        <div className="bg-white rounded-3xl p-8 md:p-10 border border-slate-100 shadow-xl shadow-emerald-100/40 mb-8 animate-fade-up">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6">
             <div>
-              <PolicyTypeBadge type={policy.policy_type} />
-              <h1 style={{ fontSize: "1.8rem", fontWeight: 800, marginTop: "12px", marginBottom: "6px" }}>
+              <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 font-bold mb-4 uppercase tracking-widest px-3 py-1">
+                {policy.policy_type.replace('_', ' ')}
+              </Badge>
+              <h1 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-3 leading-tight tracking-tight">
                 {policy.name}
               </h1>
-              <p style={{ fontSize: "1rem", color: "var(--text-muted)" }}>{policy.insurer_name}</p>
+              <div className="flex items-center text-slate-500 font-medium text-lg">
+                <Building2 className="w-5 h-5 mr-2 text-slate-400" />
+                {policy.insurer_name}
+              </div>
             </div>
-            <div
-              style={{
-                padding: "16px 24px",
-                background: "rgba(99,102,241,0.1)",
-                border: "1px solid rgba(99,102,241,0.2)",
-                borderRadius: "12px",
-                textAlign: "center",
-              }}
-            >
-              <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "4px" }}>Coverage (IDV)</p>
-              <p style={{ fontSize: "1.6rem", fontWeight: 800, color: "var(--text-primary)" }}>
+            
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 p-6 rounded-2xl text-center min-w-[200px] shrink-0">
+              <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-2 flex items-center justify-center gap-1.5">
+                <Target size={14} /> Total Coverage (IDV)
+              </p>
+              <p className="text-4xl font-extrabold text-slate-900">
                 {formatCurrency(policy.coverage_amount)}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Stats grid */}
-        <div
-          className="animate-fade-up delay-100"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "16px",
-            marginBottom: "24px",
-          }}
-        >
-          <div className="glass-card" style={{ padding: "20px" }}>
-            <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Annual Premium</p>
-            <p style={{ fontSize: "1.1rem", fontWeight: 700 }}>
-              {formatCurrency(policy.premium_min)} – {formatCurrency(policy.premium_max)}
+        {/* Stats Grid */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8 animate-fade-up" style={{ animationDelay: '100ms' }}>
+          <Card className="border-slate-100 shadow-sm rounded-3xl p-6">
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Wallet size={16} /> Annual Premium
+            </h3>
+            <p className="text-2xl font-bold text-slate-900">
+              {formatCurrency(policy.premium_min)} <span className="text-slate-300 font-normal mx-2">-</span> {formatCurrency(policy.premium_max)}
             </p>
-          </div>
+            <p className="text-sm text-slate-500 mt-2">Estimated cost before NCB or specialized discounts.</p>
+          </Card>
 
           {policy.claim_settlement_ratio != null && (
-            <div className="glass-card" style={{ padding: "20px" }}>
-              <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Claim Settlement Ratio</p>
-              <p
-                style={{
-                  fontSize: "1.3rem",
-                  fontWeight: 800,
-                  color: ratio >= 95 ? "#4ade80" : ratio >= 85 ? "#fbbf24" : "#f87171",
-                }}
-              >
-                {ratio}%
-              </p>
-              <div className="ratio-bar-track" style={{ marginTop: "8px" }}>
-                <div className="ratio-bar-fill" style={{ width: `${ratio}%` }} />
+            <Card className="border-slate-100 shadow-sm rounded-3xl p-6">
+              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <ShieldAlert size={16} /> Claim Settlement Ratio
+              </h3>
+              <div className="flex items-end justify-between mb-3">
+                <p className={`text-4xl font-extrabold ${ratio >= 95 ? 'text-emerald-500' : ratio >= 85 ? 'text-amber-500' : 'text-red-500'}`}>
+                  {ratio}%
+                </p>
+                <span className="text-sm font-medium text-slate-500 mb-1">Success Rate</span>
               </div>
-            </div>
+              <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-1000 ${ratio >= 95 ? 'bg-emerald-500' : ratio >= 85 ? 'bg-amber-500' : 'bg-red-500'}`}
+                  style={{ width: `${ratio}%` }} 
+                />
+              </div>
+            </Card>
           )}
         </div>
 
         {/* Add-ons */}
         {policy.add_ons && policy.add_ons.length > 0 && (
-          <div className="glass-card animate-fade-up delay-200" style={{ padding: "28px", marginBottom: "24px" }}>
-            <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "16px" }}>
-              ✨ Available Add-ons
-            </h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              {policy.add_ons.map((addon) => (
-                <span
-                  key={addon}
-                  style={{
-                    padding: "8px 14px",
-                    background: "rgba(59,130,246,0.08)",
-                    border: "1px solid rgba(59,130,246,0.2)",
-                    borderRadius: "8px",
-                    color: "#93c5fd",
-                    fontSize: "0.85rem",
-                    fontWeight: 500,
-                  }}
-                >
-                  ✓ {addon}
-                </span>
-              ))}
-            </div>
-          </div>
+          <Card className="border-slate-100 shadow-sm rounded-3xl mb-8 animate-fade-up overflow-hidden" style={{ animationDelay: '200ms' }}>
+            <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Sparkles className="text-teal-500" size={20} /> Included Add-ons
+              </h2>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="flex flex-wrap gap-3">
+                {policy.add_ons.map((addon) => (
+                  <div key={addon} className="flex items-center gap-2 bg-emerald-50 text-emerald-800 px-4 py-2.5 rounded-xl text-sm font-bold border border-emerald-100/50">
+                    <CheckCircle2 size={16} className="text-emerald-500" />
+                    {addon}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Description */}
         {policy.description && (
-          <div className="glass-card animate-fade-up delay-300" style={{ padding: "28px", marginBottom: "24px" }}>
-            <h2 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "12px" }}>📄 About This Policy</h2>
-            <p style={{ lineHeight: 1.8, color: "var(--text-muted)" }}>{policy.description}</p>
-          </div>
+          <Card className="border-slate-100 shadow-sm rounded-3xl mb-12 animate-fade-up" style={{ animationDelay: '300ms' }}>
+            <CardHeader className="pb-2">
+              <h2 className="text-lg font-bold text-slate-900">About This Policy</h2>
+            </CardHeader>
+            <CardContent>
+              <p className="text-slate-600 leading-relaxed text-lg">
+                {policy.description}
+              </p>
+            </CardContent>
+          </Card>
         )}
 
-        {/* CTA */}
-        <div className="animate-fade-up delay-400" style={{ display: "flex", gap: "12px" }}>
-          <button className="btn-primary" style={{ flex: 1, justifyContent: "center", padding: "14px" }}
-            onClick={() => router.push("/recommend")}
-          >
-            🎯 Get Recommendation
-          </button>
-          <button className="btn-secondary" style={{ padding: "14px 20px" }}
-            onClick={() => router.push("/compare")}
-          >
-            ⚖️ Compare More
-          </button>
+        {/* Sticky-ish CTA Actions */}
+        <div className="flex flex-col sm:flex-row gap-4 animate-fade-up" style={{ animationDelay: '400ms' }}>
+          <Button onClick={() => router.push("/recommend")} className="bg-emerald-600 hover:bg-emerald-700 h-14 rounded-2xl text-lg font-bold shadow-lg shadow-emerald-200 flex-1">
+            🎯 Check AI Recommendation
+          </Button>
+          <Button variant="outline" onClick={() => router.push("/compare")} className="h-14 rounded-2xl text-lg font-bold border-slate-200 hover:bg-slate-50 flex-1">
+            ⚖️ Add to Comparison
+          </Button>
         </div>
       </div>
     </main>

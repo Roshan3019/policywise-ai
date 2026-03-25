@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ShieldAlert } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -14,82 +16,31 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        background: "rgba(8,12,24,0.85)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid var(--glass-border)",
-      }}
-    >
-      <div
-        className="container-main"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: "64px",
-        }}
-      >
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: "8px",
-              background: "var(--grad-brand)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "16px",
-              fontWeight: 800,
-              color: "white",
-              boxShadow: "var(--shadow-glow)",
-            }}
-          >
-            P
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
+            <ShieldAlert size={18} strokeWidth={2.5} />
           </div>
-          <span
-            style={{
-              fontWeight: 700,
-              fontSize: "1.05rem",
-              letterSpacing: "-0.02em",
-              color: "var(--text-primary)",
-            }}
-          >
-            Policy<span className="gradient-text">Wise</span>
+          <span className="font-heading font-bold text-lg tracking-tight text-slate-900">
+            Policy<span className="text-emerald-600">Wise</span>
           </span>
         </Link>
 
         {/* Nav Links */}
-        <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+        <div className="hidden md:flex items-center gap-2">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                style={{
-                  padding: "8px 16px",
-                  borderRadius: "8px",
-                  fontSize: "0.875rem",
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive ? "white" : "var(--text-muted)",
-                  background: isActive
-                    ? "var(--glass-hover)"
-                    : "transparent",
-                  border: isActive
-                    ? "1px solid rgba(99,102,241,0.3)"
-                    : "1px solid transparent",
-                  transition: "all var(--duration-fast) var(--ease-smooth)",
-                  textDecoration: "none",
-                }}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                }`}
               >
                 {link.label}
               </Link>
@@ -98,9 +49,13 @@ export default function Navbar() {
         </div>
 
         {/* CTA */}
-        <Link href="/recommend" className="btn-primary" style={{ padding: "8px 18px", fontSize: "0.85rem" }}>
-          Get Recommendation →
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/recommend">
+            <Button className="font-medium bg-emerald-600 hover:bg-emerald-700">
+              Get Recommended →
+            </Button>
+          </Link>
+        </div>
       </div>
     </nav>
   );

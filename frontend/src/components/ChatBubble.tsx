@@ -1,6 +1,8 @@
 "use client";
 
 import type { ChatMessage } from "@/lib/types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, Bot } from "lucide-react";
 
 interface ChatBubbleProps {
   message: ChatMessage;
@@ -10,73 +12,39 @@ export default function ChatBubble({ message }: ChatBubbleProps) {
   const isUser = message.role === "user";
 
   return (
-    <div
-      className="animate-fade-up"
-      style={{
-        display: "flex",
-        justifyContent: isUser ? "flex-end" : "flex-start",
-        marginBottom: "12px",
-      }}
-    >
+    <div className={`flex w-full mb-6 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
-        <div
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: "50%",
-            background: "var(--grad-brand)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "14px",
-            marginRight: "10px",
-            flexShrink: 0,
-            alignSelf: "flex-end",
-          }}
-        >
-          🤖
-        </div>
+        <Avatar className="w-8 h-8 mr-3 mt-1 border border-emerald-100 bg-emerald-50">
+          <AvatarFallback className="bg-transparent text-emerald-600">
+            <Bot size={18} />
+          </AvatarFallback>
+        </Avatar>
       )}
 
-      <div>
-        <div className={isUser ? "chat-bubble-user" : "chat-bubble-ai"}>
+      <div className={`flex flex-col ${isUser ? "items-end" : "items-start"} max-w-[80%]`}>
+        <div
+          className={`px-4 py-3 shadow-sm ${
+            isUser
+              ? "bg-emerald-600 text-white rounded-2xl rounded-tr-none"
+              : "bg-slate-50 text-slate-800 border border-slate-200 rounded-2xl rounded-tl-none whitespace-pre-wrap"
+          }`}
+        >
           {message.content}
         </div>
-        <p
-          style={{
-            fontSize: "0.7rem",
-            color: "var(--text-subtle)",
-            marginTop: "4px",
-            textAlign: isUser ? "right" : "left",
-            paddingLeft: isUser ? 0 : "4px",
-          }}
-        >
+        <span className="text-[10px] text-slate-400 font-medium mt-1.5 px-1 uppercase tracking-wider">
           {message.timestamp.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })}
-        </p>
+        </span>
       </div>
 
       {isUser && (
-        <div
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.1)",
-            border: "1px solid var(--glass-border)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "14px",
-            marginLeft: "10px",
-            flexShrink: 0,
-            alignSelf: "flex-end",
-          }}
-        >
-          👤
-        </div>
+        <Avatar className="w-8 h-8 ml-3 mt-1 bg-slate-100 text-slate-600">
+          <AvatarFallback className="bg-transparent">
+            <User size={16} />
+          </AvatarFallback>
+        </Avatar>
       )}
     </div>
   );
