@@ -93,3 +93,36 @@ export async function getRecommendations(
   if (!response.data) throw new Error("Failed to get recommendations");
   return response.data;
 }
+
+// ── AI Chat ────────────────────────────────────────────────────────────────────
+
+export interface ChatSource {
+  source: string;
+  page: number;
+  score: number;
+}
+
+export interface ChatResponse {
+  answer: string;
+  sources: ChatSource[];
+  retrieved_count: number;
+  fallback: boolean;
+}
+
+export async function sendChat(
+  question: string,
+  top_k = 5
+): Promise<ChatResponse> {
+  const res = await fetch(`${BASE_URL}/api/v1/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question, top_k }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.detail || `Chat request failed: ${res.status}`);
+  }
+
+  return res.json() as Promise<ChatResponse>;
+}

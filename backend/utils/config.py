@@ -12,7 +12,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # ── App ─────────────────────────────────────────────────────────────────
     app_name: str = "PolicyWise AI"
-    app_version: str = "0.1.0"
+    app_version: str = "1.0.0"
     debug: bool = False
 
     # ── Database ─────────────────────────────────────────────────────────────
@@ -24,9 +24,14 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60
 
-    # ── AI (wired in Phase 5) ─────────────────────────────────────────────────
+    # ── AI (Phase 5) ──────────────────────────────────────────────────────────
     openai_api_key: str = ""
+    google_api_key: str = ""
     vector_db_path: str = "../data/vector_store"
+    llm_model: str = "gpt-4o-mini"
+    embedding_model: str = "text-embedding-3-small"
+    embedding_chunk_size: int = 1000
+    embedding_chunk_overlap: int = 200
 
     model_config = SettingsConfigDict(
         env_file=".env",

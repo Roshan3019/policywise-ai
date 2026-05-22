@@ -2,34 +2,31 @@
 
 import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import ChatBubble from "@/components/ChatBubble";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, ShieldQuestion } from "lucide-react";
+import { SparklesCore } from "@/components/ui/sparkles";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Send, Bot, User, ShieldQuestion, ExternalLink } from "lucide-react";
 import type { ChatMessage } from "@/lib/types";
+import { sendChat, type ChatSource } from "@/lib/api";
 
-const PHASE5_TOPICS = [
-  "Zero Depreciation",
-  "No Claim Bonus (NCB)",
-  "Insured Declared Value",
-  "Third-Party Cover",
-  "Engine Protection",
-  "Claim Settlement",
-];
+const QUICK_TOPICS = ["Zero Depreciation", "No Claim Bonus (NCB)", "Insured Declared Value", "Third-Party Cover", "Claim Settlement Ratio"];
 
-const WELCOME_MESSAGE: ChatMessage = {
+interface MessageWithSources extends ChatMessage {
+  sources?: ChatSource[];
+  fallback?: boolean;
+}
+
+const WELCOME: MessageWithSources = {
   id: "welcome",
   role: "ai",
-  content:
-    "👋 Hello! I'm PolicyWise AI, your intelligent insurance advisor.\n\nI can help you understand car insurance concepts, explain policy terms, and guide your coverage decisions.\n\n⚡ Full AI capabilities are being wired in Phase 5. For now, try clicking a quick topic below or asking me what a term means!",
+  content: "👋 Hello! I'm PolicyWise AI — powered by real Bajaj Allianz policy documents.\n\nI can answer questions grounded in actual insurance policy wordings. Ask me anything about car insurance!",
   timestamp: new Date(),
 };
 
 function ChatInterface() {
-  const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
+  const [messages, setMessages] = useState<MessageWithSources[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q");
@@ -39,124 +36,198 @@ function ChatInterface() {
   }, [messages, isLoading]);
 
   useEffect(() => {
-    if (initialQuery && messages.length === 1) {
-      sendMessage(initialQuery);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (initialQuery && messages.length === 1) sendMessage(initialQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
 
   const sendMessage = async (text?: string) => {
     const content = text ?? input.trim();
     if (!content) return;
+    setError("");
 
-    const userMsg: ChatMessage = {
+    const userMsg: MessageWithSources = {
       id: Date.now().toString(),
       role: "user",
       content,
       timestamp: new Date(),
     };
-
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
 
-    // Phase 5 stub simulation
-    await new Promise((r) => setTimeout(r, 1000));
-
-    const aiResponse: ChatMessage = {
-      id: (Date.now() + 1).toString(),
-      role: "ai",
-      content: generateStubResponse(content),
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, aiResponse]);
-    setIsLoading(false);
+    try {
+      const response = await sendChat(content);
+      const aiMsg: MessageWithSources = {
+        id: (Date.now() + 1).toString(),
+        role: "ai",
+        content: response.answer,
+        timestamp: new Date(),
+        sources: response.sources,
+        fallback: response.fallback,
+      };
+      setMessages((prev) => [...prev, aiMsg]);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Connection failed. Is the backend running?";
+      setError(msg);
+      // Add an error message to the chat
+      const errMsg: MessageWithSources = {
+        id: (Date.now() + 2).toString(),
+        role: "ai",
+        content: `⚠️ ${msg}`,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errMsg]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <main className="min-h-screen pt-16 bg-slate-50 flex flex-col items-center">
-      <div className="w-full max-w-3xl flex-1 flex flex-col bg-white border-x border-slate-200 shadow-sm relative h-[calc(100vh-4rem)]">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+    <main className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
+      {/* Particle background */}
+      <SparklesCore
+        id="chat-bg-particles"
+        background="transparent"
+        minSize={0.3}
+        maxSize={0.8}
+        particleDensity={60}
+        particleColor="#818cf8"
+        speed={0.8}
+        className="fixed inset-0 w-full h-full pointer-events-none z-0"
+      />
+
+      {/* Full-screen flex layout */}
+      <div className="relative z-10 flex flex-col h-screen pt-16">
+        <div className="flex flex-col flex-1 min-h-0 w-full max-w-3xl mx-auto">
+
+          {/* Header */}
+          <div className="px-6 py-4 border-b border-white/10 flex items-center gap-3 bg-black/40 backdrop-blur-sm shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
               <ShieldQuestion size={20} />
             </div>
-            <div>
-              <h1 className="font-heading font-bold text-slate-900">AI Insurance Assistant</h1>
-              <div className="flex items-center gap-1.5 opacity-80">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs font-medium text-slate-500">Available · Phase 5 Stub mode</span>
+            <div className="flex-1">
+              <h1 className="font-bold text-white text-base">AI Insurance Assistant</h1>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs text-neutral-400 font-medium">Powered by GPT-4o-mini + Bajaj Policy Docs</span>
               </div>
             </div>
+            {error && (
+              <div className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full">
+                ⚠ API Error
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* Chat Area */}
-        <ScrollArea className="flex-1 p-6">
-          <div className="flex flex-col gap-2 pb-4">
-            {messages.map((msg) => (
-              <ChatBubble key={msg.id} message={msg} />
-            ))}
-            
-            {isLoading && (
-              <div className="flex items-end gap-3 opacity-70 animate-fade-in pl-1">
-                <div className="w-8 h-8 rounded-full border border-emerald-100 bg-emerald-50 flex items-center justify-center text-emerald-600 mb-1 shrink-0">
-                  <Bot size={18} />
+          {/* Scrollable messages */}
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            {messages.map((msg) => {
+              const isUser = msg.role === "user";
+              return (
+                <div key={msg.id} className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
+                  {!isUser && (
+                    <Avatar className="w-8 h-8 mr-3 mt-1 shrink-0 bg-indigo-500/20 border border-indigo-500/30">
+                      <AvatarFallback className="bg-transparent text-indigo-400"><Bot size={16} /></AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div className={`max-w-[82%] flex flex-col ${isUser ? "items-end" : "items-start"}`}>
+                    {/* Bubble */}
+                    <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                      isUser
+                        ? "bg-indigo-500/20 border border-indigo-500/30 text-white rounded-br-sm"
+                        : "bg-white/5 border border-white/10 text-neutral-200 rounded-bl-sm"
+                    }`}>
+                      {msg.content}
+                    </div>
+
+                    {/* Source citations */}
+                    {msg.sources && msg.sources.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {msg.sources.map((s, i) => (
+                          <div
+                            key={i}
+                            className="flex items-center gap-1 text-[10px] px-2 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-medium"
+                          >
+                            <ExternalLink size={9} />
+                            {s.source} · p{s.page}
+                          </div>
+                        ))}
+                        {msg.fallback && (
+                          <div className="text-[10px] px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-medium">
+                            No documents loaded — general knowledge used
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <span suppressHydrationWarning className="text-[10px] text-neutral-600 mt-1 px-1">
+                      {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    </span>
+                  </div>
+                  {isUser && (
+                    <Avatar className="w-8 h-8 ml-3 mt-1 shrink-0 bg-white/5 border border-white/10">
+                      <AvatarFallback className="bg-transparent text-neutral-400"><User size={16} /></AvatarFallback>
+                    </Avatar>
+                  )}
                 </div>
-                <div className="bg-slate-50 text-slate-500 px-4 py-3 rounded-2xl rounded-tl-none border border-slate-200 flex items-center gap-1.5 h-[46px]">
-                  <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              );
+            })}
+
+            {/* Typing indicator */}
+            {isLoading && (
+              <div className="flex items-end gap-3 opacity-70">
+                <Avatar className="w-8 h-8 bg-indigo-500/20 border border-indigo-500/30 shrink-0">
+                  <AvatarFallback className="bg-transparent text-indigo-400"><Bot size={16} /></AvatarFallback>
+                </Avatar>
+                <div className="bg-white/5 border border-white/10 rounded-2xl rounded-bl-sm px-4 h-11 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             )}
             <div ref={bottomRef} />
           </div>
-        </ScrollArea>
 
-        {/* Quick Topics */}
-        {messages.length < 3 && (
-          <div className="p-4 bg-slate-50/50 block">
-             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-2">Most Asked</p>
-             <div className="flex flex-wrap gap-2 px-2">
-               {PHASE5_TOPICS.map((topic) => (
-                 <button
-                   key={topic}
-                   onClick={() => sendMessage(`What is ${topic}?`)}
-                   className="px-3 py-1.5 text-sm font-medium bg-white border border-slate-200 text-slate-600 rounded-lg hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50 transition-all shadow-sm"
-                 >
-                   {topic}
-                 </button>
-               ))}
-             </div>
-          </div>
-        )}
+          {/* Quick topic chips */}
+          {messages.length < 3 && (
+            <div className="px-6 py-3 border-t border-white/5 shrink-0">
+              <p className="text-[10px] uppercase tracking-wider text-neutral-600 mb-2 font-semibold">Quick topics</p>
+              <div className="flex flex-wrap gap-2">
+                {QUICK_TOPICS.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => sendMessage(`What is ${t}?`)}
+                    className="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white hover:border-indigo-500/40 transition-all"
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-        {/* Input Bar */}
-        <div className="p-4 bg-white border-t border-slate-100">
-          <form 
-            onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
-            className="flex items-center gap-2 max-w-full"
-          >
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="E.g. Explain No Claim Bonus like I'm 5..."
-              className="flex-1 h-12 shadow-sm rounded-xl border-slate-200 focus-visible:ring-emerald-500"
-              disabled={isLoading}
-            />
-            <Button 
-              type="submit" 
-              disabled={!input.trim() || isLoading}
-              className="h-12 w-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 shadow-md shrink-0 flex items-center justify-center p-0"
-            >
-              <Send size={18} />
-            </Button>
-          </form>
-          <div className="text-center mt-3 mb-1">
-            <span className="text-[10px] text-slate-400 font-medium tracking-wide uppercase">AI can make mistakes. Verify policy terms before buying.</span>
+          {/* Pinned input bar */}
+          <div className="p-4 border-t border-white/10 bg-black/20 backdrop-blur-sm shrink-0">
+            <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex gap-2">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask about any insurance term, clause, or policy..."
+                disabled={isLoading}
+                className="flex-1 h-12 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-neutral-500 focus:outline-none focus:border-indigo-500/50 text-sm transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={!input.trim() || isLoading}
+                className="w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 text-white flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40 shrink-0"
+              >
+                <Send size={18} />
+              </button>
+            </form>
+            <p className="text-center text-[10px] text-neutral-600 mt-2 uppercase tracking-wider">
+              Answers grounded in real Bajaj Allianz policy documents · Always verify before buying
+            </p>
           </div>
         </div>
       </div>
@@ -166,23 +237,12 @@ function ChatInterface() {
 
 export default function ChatPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen pt-16 flex items-center justify-center">Loading AI...</div>}>
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-950 pt-16 flex items-center justify-center text-neutral-400">
+        Loading AI...
+      </div>
+    }>
       <ChatInterface />
     </Suspense>
   );
-}
-
-function generateStubResponse(query: string): string {
-  const q = query.toLowerCase();
-
-  if (q.includes("idv") || q.includes("declared value"))
-    return "The **Insured Declared Value (IDV)** is essentially the maximum sum assured fixed by the insurer which is provided on theft or total loss of vehicle. Think of it as the current market value of your car.\n\nIt is calculated by applying a depreciation percentage to the manufacturer's selling price of the car.";
-
-  if (q.includes("ncb") || q.includes("no claim bonus"))
-    return "🏆 **No Claim Bonus (NCB)** is a discount in premium offered by car insurance companies to policyholders for not making any claims during the policy term. It's a reward for safe driving!\n\nThe discount typically starts at 20% for the first claim-free year and can go up to 50% for 5 consecutive claim-free years.";
-
-  if (q.includes("zero dep") || q.includes("depreciation"))
-    return "🛡️ **Zero Depreciation Cover** (also known as Nil Depreciation or Bumper to Bumper policy) is a popular add-on that offers complete external coverage for your car without factoring in depreciation.\n\nWithout this, if your car is damaged, you'll only receive the depreciated value of the replaced parts, meaning you pay the difference out of pocket.";
-
-  return `I understand you're asking about **"${query}"**.\n\nCurrently, I am in Phase 2 stub mode. Comprehensive AI answers with RAG-based context parsing will be available in Phase 5.\n\nIn the meantime, feel free to use the Recommend or Compare tools!`;
 }

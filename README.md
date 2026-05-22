@@ -95,9 +95,10 @@ The AI explains claim eligibility based on policy conditions.
 | **PostgreSQL** | Latest | Primary relational database |
 | **Pydantic v2** | 2.7.1 | Data validation & settings |
 | **Loguru** | 0.7.2 | Structured logging |
-| **LangChain** | 0.2.3 | AI/RAG pipeline *(Phase 2)* |
-| **OpenAI GPT** | 1.30.1 | LLM for AI responses *(Phase 2)* |
-| **ChromaDB** | 0.5.0 | Vector store for RAG *(Phase 2)* |
+| **LangChain** | 0.2.3 | AI/RAG pipeline |
+| **OpenAI GPT-4o-mini** | 1.30.1 | LLM for AI responses |
+| **ChromaDB** | 0.5.0 | Vector store for RAG |
+| **OpenAI Embeddings** | 0.1.8 | text-embedding-3-small |
 
 ### 🎨 Frontend
 | Technology | Version | Purpose |
@@ -106,7 +107,7 @@ The AI explains claim eligibility based on policy conditions.
 | **React** | 19.2.3 | UI library |
 | **TypeScript** | 5.x | Type safety |
 | **Tailwind CSS** | 4.x | Utility-first styling |
-| **Shadcn UI** | Latest | UI component library *(Phase 3)* |
+| **Shadcn UI** | Latest | UI component library |
 
 ---
 
@@ -116,13 +117,23 @@ The AI explains claim eligibility based on policy conditions.
 policywise-ai/
 │
 ├── backend/                        # FastAPI backend
-│   ├── ai/                         # AI pipeline (Phase 2)
+│   ├── ai/                         # AI pipeline (Phase 5)
+│   │   ├── loaders/                # Document loaders (PDF, TXT, MD)
+│   │   ├── chunking/               # Text chunking module
+│   │   ├── embeddings/           # OpenAI embeddings
+│   │   ├── vectorstore/            # ChromaDB vector store
+│   │   ├── retrieval/              # Similarity search
+│   │   ├── prompts/                # RAG prompt templates
+│   │   ├── services/               # LLM service
+│   │   ├── pipelines/              # Ingestion & RAG pipelines
+│   │   └── utils/                  # AI utilities
 │   ├── alembic/                    # Database migrations
 │   │   └── versions/               # Migration history
 │   │       └── bd3311e2b2a7_*.py   # Initial schema (users table)
 │   ├── api/
 │   │   └── v1/                     # Versioned API routes
-│   │       └── health.py           # Health check endpoint
+│   │       ├── health.py           # Health check endpoint
+│   │       └── ai.py               # AI endpoint (POST /api/v1/ai/ask)
 │   ├── database/
 │   │   ├── base.py                 # SQLAlchemy declarative base
 │   │   └── connection.py           # Async DB engine & session
@@ -153,7 +164,7 @@ policywise-ai/
 | Phase | Focus Area | Key Deliverables | Status |
 |---|---|---|---|
 | **Phase 1** | Project Foundation & Infrastructure | FastAPI scaffold, PostgreSQL setup, Alembic migrations, Next.js frontend init, project structure, health API | ✅ Complete |
-| **Phase 2** | AI & RAG Integration | LangChain setup, insurance knowledge base, ChromaDB vector store, embedding pipeline, AI Q&A API (`POST /api/ask`) | 🔜 Upcoming |
+| **Phase 2** | AI & RAG Integration | LangChain setup, insurance knowledge base, ChromaDB vector store, embedding pipeline | ✅ Complete |
 | **Phase 3** | Core Product Features | Policy comparison tool, smart recommendation engine, claim scenario guidance, frontend UI with Shadcn, user auth | 🔜 Upcoming |
 | **Phase 4** | Polish, Performance & Deployment | Analytics dashboard, monitoring (Prometheus/Grafana), Docker containerization, deployment to Vercel + AWS/GCP | 🔜 Upcoming |
 
@@ -298,25 +309,28 @@ Frontend live at: **http://localhost:3000**
 
 ## Environment Variables
 
-| Variable | Required | Phase | Description |
-|---|---|---|---|
-| `DATABASE_URL` | ✅ Yes | Phase 1 | Sync PostgreSQL connection string |
-| `DATABASE_ASYNC_URL` | ✅ Yes | Phase 1 | Async PostgreSQL connection string (`asyncpg`) |
-| `DEBUG` | ❌ Optional | Phase 1 | Enable debug mode (`True`/`False`) |
-| `APP_NAME` | ❌ Optional | Phase 1 | Application display name |
-| `APP_VERSION` | ❌ Optional | Phase 1 | Application version |
-| `OPENAI_API_KEY` | 🔜 Phase 2 | Phase 2 | OpenAI API key for LLM responses |
-| `VECTOR_DB_PATH` | 🔜 Phase 2 | Phase 2 | Path to ChromaDB vector store |
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | ✅ Yes | Sync PostgreSQL connection string |
+| `DATABASE_ASYNC_URL` | ✅ Yes | Async PostgreSQL connection string (`asyncpg`) |
+| `DEBUG` | ❌ Optional | Enable debug mode (`True`/`False`) |
+| `APP_NAME` | ❌ Optional | Application display name |
+| `APP_VERSION` | ❌ Optional | Application version |
+| `OPENAI_API_KEY` | ✅ Yes (Phase 2+) | OpenAI API key for LLM responses |
+| `VECTOR_DB_PATH` | ✅ Yes | Path to ChromaDB vector store |
+| `MODEL_NAME` | ❌ Optional | LLM model name (default: gpt-4o-mini) |
+| `EMBEDDING_MODEL` | ❌ Optional | Embedding model (default: text-embedding-3-small) |
 
 ---
 
 ## API Reference
 
-### Current Endpoints (Phase 1)
+### Current Endpoints (Phase 2+)
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/api/v1/health` | Server health check |
+| `POST` | `/api/v1/ai/ask` | Ask AI insurance question |
 
 **Health Check Response:**
 ```json
@@ -326,11 +340,31 @@ Frontend live at: **http://localhost:3000**
 }
 ```
 
-### Planned Endpoints (Phase 2+)
+**AI Ask Request:**
+```json
+POST /api/v1/ai/ask
+{
+  "question": "What is No Claim Bonus?",
+  "top_k": 5
+}
+```
+
+**AI Ask Response:**
+```json
+{
+  "answer": "No Claim Bonus (NCB) is a discount offered to policyholders...",
+  "sources": [
+    {"source": "insurance_basics", "page": 1, "score": 0.85}
+  ],
+  "retrieved_chunks": 3,
+  "fallback": false
+}
+```
+
+### Planned Endpoints (Phase 3+)
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/api/ask` | Ask AI insurance question |
 | `POST` | `/api/recommend` | Get personalized policy recommendations |
 | `GET` | `/api/policies` | List available insurance policies |
 | `GET` | `/api/policy/{id}` | Get detailed policy info |
@@ -340,6 +374,42 @@ Frontend live at: **http://localhost:3000**
 
 - **Swagger UI:** [http://localhost:8000/docs](http://localhost:8000/docs)
 - **ReDoc:** [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+---
+
+## AI Ingestion
+
+Before using the AI assistant, you need to ingest insurance documents into the vector store.
+
+### Prepare Documents
+
+Place insurance documents (PDF, TXT, MD) in:
+```
+backend/data/insurance_docs/
+```
+
+### Run Ingestion
+
+From the `backend/` directory:
+
+```bash
+python -m ai.pipelines.ingest_pipeline
+```
+
+This will:
+1. Load all documents from `backend/data/insurance_docs/`
+2. Chunk them into smaller pieces
+3. Generate OpenAI embeddings
+4. Store them in ChromaDB
+
+### Expected Output:
+```
+Starting ingestion from backend/data/insurance_docs
+Step 1: Loading documents...
+Step 2: Chunking documents...
+Step 3 & 4: Embedding and storing in ChromaDB...
+Ingestion complete: X chunks stored
+```
 
 ---
 
