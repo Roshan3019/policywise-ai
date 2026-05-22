@@ -6,12 +6,18 @@ PolicyWise AI — FastAPI application entry point.
 Startup sequence:
   1. Load settings from .env
   2. Create all DB tables (idempotent — skips if already exist)
-  3. Mount all API v1 routers
-  4. Start the server
+  3. Pre-warm Ollama LLM (if using local model)
+  4. Mount all API v1 routers
+  5. Start the server
 
 Production tip: use Alembic migrations (not create_all_tables)
 for schema changes in production deployments.
 """
+import os
+
+# Disable Chroma telemetry before any imports
+os.environ["CHROMA_DISABLE_TELEMETRY"] = "true"
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -25,17 +31,29 @@ from utils.config import get_settings
 settings = get_settings()
 
 
+async def warmup_llm():
+    """Pre-warm the LLM service on startup (especially for Ollama)."""
+    try:
+        from ai.services.llm_service import LLMService
+        logger.info("[Warmup] Pre-loading LLM model...")
+        LLMService()
+        logger.info("[Warmup] LLM service ready")
+    except Exception as e:
+        logger.warning(f"[Warmup] Could not pre-load LLM: {e}")
+
+
 # ---------------------------------------------------------------------------
 # Lifespan — runs once on startup and once on shutdown
 # ---------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan: create tables on startup, clean up on shutdown."""
-    logger.info(f"🚀 Starting {settings.app_name} v{settings.app_version}")
+    logger.info(f"[Start] Starting {settings.app_name} v{settings.app_version}")
     await create_all_tables()
-    logger.info("✅ Database tables ready")
+    logger.info("[Ready] Database tables ready")
+    await warmup_llm()
     yield
-    logger.info("🛑 Shutting down PolicyWise AI")
+    logger.info("[Stop] Shutting down PolicyWise AI")
 
 
 # ---------------------------------------------------------------------------

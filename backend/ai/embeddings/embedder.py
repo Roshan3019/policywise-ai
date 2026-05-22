@@ -25,7 +25,7 @@ def get_embedder():
     global _model
     if _model is None:
         from sentence_transformers import SentenceTransformer
-        print(f"  🧠 Loading embedding model: {EMBEDDING_MODEL}")
+        print(f"  [Brain] Loading embedding model: {EMBEDDING_MODEL}")
         _model = SentenceTransformer(EMBEDDING_MODEL)
     return _model
 
@@ -81,7 +81,7 @@ def embed_and_store(chunks: list[DocumentChunk], batch_size: int = 50) -> int:
         ids = [_chunk_id(c) for c in batch]
         metadatas = [c.metadata for c in batch]
 
-        print(f"  🔢 Embedding batch {i // batch_size + 1} ({len(batch)} chunks)...")
+        print(f"  [Embed] Embedding batch {i // batch_size + 1} ({len(batch)} chunks)...")
         embeddings = embed_texts(texts)
 
         collection.upsert(

@@ -1,7 +1,7 @@
 """
 ai/services/llm_service.py
 --------------------------
-LLM service with OpenAI and Google Gemini (fallback) support.
+LLM service with OpenAI, Ollama, and Google Gemini (fallback) support.
 """
 import time
 from typing import Any
@@ -17,7 +17,7 @@ from utils.config import get_settings
 
 
 class LLMService:
-    """LLM service with OpenAI primary and Google Gemini fallback."""
+    """LLM service with OpenAI primary, Ollama local, and Google Gemini fallback."""
     
     def __init__(
         self,
@@ -35,6 +35,8 @@ class LLMService:
         self.retry_delay = retry_delay
         
         self.use_openai = bool(self.settings.openai_api_key)
+        self.use_ollama = False
+        self.use_google = False
         
         if self.use_openai:
             logger.info(f"Using OpenAI LLM with model: {model}")
@@ -47,7 +49,26 @@ class LLMService:
         elif self.settings.google_api_key:
             self._load_google_fallback()
         else:
-            logger.warning("No LLM API key available - LLM calls will fail")
+            self._load_ollama_fallback()
+    
+    def _load_ollama_fallback(self):
+        """Load Ollama as local fallback (no API key required)."""
+        try:
+            from langchain_ollama import ChatOllama
+            logger.info(f"Using Ollama local LLM with model: {self.settings.ollama_model}")
+            self.client = ChatOllama(
+                model=self.settings.ollama_model,
+                temperature=self.temperature,
+                request_timeout=120.0,
+            )
+            self.use_openai = False
+            self.use_ollama = True
+        except ImportError:
+            logger.warning("langchain-ollama not installed - falling back to template responses")
+            self.use_ollama = False
+        except Exception as e:
+            logger.warning(f"Ollama not available: {e}")
+            self.use_ollama = False
     
     def _load_google_fallback(self):
         """Load Google Gemini as fallback."""
@@ -69,6 +90,8 @@ class LLMService:
             return self._generate_openai(prompt, system_prompt)
         elif hasattr(self, 'use_google') and self.use_google:
             return self._generate_google(prompt, system_prompt)
+        elif self.use_ollama:
+            return self._generate_ollama(prompt, system_prompt)
         else:
             return self._template_fallback(prompt)
     
@@ -106,15 +129,33 @@ class LLMService:
             logger.error(f"Google Gemini call failed: {e}")
             return self._template_fallback(prompt)
     
+    def _generate_ollama(self, prompt: str, system_prompt: str) -> str:
+        """Generate using Ollama local LLM."""
+        try:
+            logger.info("Generating response with Ollama...")
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt},
+            ]
+            response = self.client.invoke(messages)
+            content = response.content or "No response generated."
+            logger.info(f"Ollama response length: {len(content)} chars")
+            return content
+        except Exception as e:
+            logger.error(f"Ollama call failed: {e}")
+            return self._template_fallback(prompt)
+    
     def _template_fallback(self, prompt: str) -> str:
         """Fallback response when no LLM is available."""
-        return f"""⚠️ **No LLM API key configured.**
+        return f"""⚠️ **No LLM available.**
 
-The system cannot generate a response because no OpenAI or Google API key is available.
+The system cannot generate a response because no LLM is configured.
 
-To fix this, add an API key to your `.env` file:
-- `OPENAI_API_KEY=sk-...` for OpenAI GPT-4o-mini
-- `GOOGLE_API_KEY=AIza...` for Google Gemini (free tier)"""
+To fix this, either:
+- Install Ollama: https://ollama.com and run `ollama pull llama3:8b`
+- Add API keys to your `.env` file:
+  - `OPENAI_API_KEY=sk-...` for OpenAI GPT-4o-mini
+  - `GOOGLE_API_KEY=AIza...` for Google Gemini"""
 
     def generate_rag_response(
         self,

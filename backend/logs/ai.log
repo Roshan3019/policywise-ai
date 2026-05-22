@@ -174,3 +174,114 @@
 2026-05-22 12:25:50.568 | ERROR    | ai.services.llm_service:_generate_google:106 - Google Gemini call failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 8.726795909s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_input_token_count', 'quotaId': 'GenerateContentInputTokensPerModelPerMinute-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.0-flash', 'location': 'global'}}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '8s'}]}}
 2026-05-22 12:25:50.568 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:70 - Answered with 5 retrieved chunks
 2026-05-22 12:25:50.568 | INFO     | api.v1.chat:chat:52 - Chat answered | retrieved=5 fallback=False sources=['insurance_basics', 'car-Policy-wording', 'insurance_basics']
+2026-05-22 12:29:12.603 | INFO     | api.v1.chat:chat:44 - Chat question received: What is No Claim Bonus (NCB)?...
+2026-05-22 12:29:12.604 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is No Claim Bonus (NCB)?...
+2026-05-22 12:29:12.625 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 12:29:13.326 | ERROR    | ai.services.llm_service:_generate_google:106 - Google Gemini call failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\nPlease retry in 45.949843217s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_input_token_count', 'quotaId': 'GenerateContentInputTokensPerModelPerMinute-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '45s'}]}}
+2026-05-22 12:29:13.326 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:70 - Answered with 5 retrieved chunks
+2026-05-22 12:29:13.326 | INFO     | api.v1.chat:chat:52 - Chat answered | retrieved=5 fallback=False sources=['insurance_basics', 'car-Policy-wording', 'insurance_basics']
+2026-05-22 12:52:46.961 | INFO     | main:lifespan:38 - 🛑 Shutting down PolicyWise AI
+2026-05-22 13:47:46.657 | INFO     | main:lifespan:34 - 🚀 Starting PolicyWise AI v1.0.0
+2026-05-22 13:47:46.784 | INFO     | main:lifespan:36 - ✅ Database tables ready
+2026-05-22 13:47:57.006 | INFO     | main:lifespan:34 - 🚀 Starting PolicyWise AI v1.0.0
+2026-05-22 13:47:57.086 | INFO     | main:lifespan:36 - ✅ Database tables ready
+2026-05-22 13:48:07.154 | INFO     | main:lifespan:34 - 🚀 Starting PolicyWise AI v1.0.0
+2026-05-22 13:48:07.233 | INFO     | main:lifespan:36 - ✅ Database tables ready
+2026-05-22 13:48:16.784 | INFO     | main:lifespan:34 - 🚀 Starting PolicyWise AI v1.0.0
+2026-05-22 13:48:16.859 | INFO     | main:lifespan:36 - ✅ Database tables ready
+2026-05-22 13:48:24.369 | INFO     | main:lifespan:34 - 🚀 Starting PolicyWise AI v1.0.0
+2026-05-22 13:48:24.500 | INFO     | main:lifespan:36 - ✅ Database tables ready
+2026-05-22 13:48:26.951 | INFO     | main:lifespan:34 - 🚀 Starting PolicyWise AI v1.0.0
+2026-05-22 13:48:27.023 | INFO     | main:lifespan:36 - ✅ Database tables ready
+2026-05-22 13:50:17.726 | INFO     | main:lifespan:34 - 🚀 Starting PolicyWise AI v1.0.0
+2026-05-22 13:50:17.801 | INFO     | main:lifespan:36 - ✅ Database tables ready
+2026-05-22 13:53:09.050 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 13:54:46.364 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 13:56:02.204 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is No Claim Bonus?...
+2026-05-22 13:57:26.142 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is No Claim Bonus?...
+2026-05-22 13:57:30.601 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 13:57:30.717 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:02:19.234 | INFO     | main:lifespan:34 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 14:02:19.448 | INFO     | main:lifespan:36 - [Ready] Database tables ready
+2026-05-22 14:02:40.422 | INFO     | api.v1.chat:chat:44 - Chat question received: What is Zero Depreciation?...
+2026-05-22 14:02:40.422 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is Zero Depreciation?...
+2026-05-22 14:02:44.624 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 14:02:44.742 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:09:08.850 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is insurance?...
+2026-05-22 14:09:12.980 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 14:09:13.115 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:09:13.134 | INFO     | ai.services.llm_service:_generate_ollama:135 - Generating response with Ollama...
+2026-05-22 14:13:05.464 | INFO     | main:lifespan:34 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 14:13:05.622 | INFO     | main:lifespan:36 - [Ready] Database tables ready
+2026-05-22 14:16:28.768 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 3 chunks for query
+2026-05-22 14:17:20.890 | INFO     | main:lifespan:51 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 14:17:20.971 | INFO     | main:lifespan:53 - [Ready] Database tables ready
+2026-05-22 14:17:20.972 | INFO     | main:warmup_llm:38 - [Warmup] Pre-loading LLM model...
+2026-05-22 14:17:21.075 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:17:21.094 | INFO     | main:warmup_llm:40 - [Warmup] LLM service ready
+2026-05-22 14:19:11.904 | INFO     | main:lifespan:51 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 14:19:12.092 | INFO     | main:lifespan:53 - [Ready] Database tables ready
+2026-05-22 14:19:12.092 | INFO     | main:warmup_llm:38 - [Warmup] Pre-loading LLM model...
+2026-05-22 14:19:12.190 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:19:12.213 | INFO     | main:warmup_llm:40 - [Warmup] LLM service ready
+2026-05-22 14:19:20.099 | INFO     | main:lifespan:51 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 14:19:20.172 | INFO     | main:lifespan:53 - [Ready] Database tables ready
+2026-05-22 14:19:20.172 | INFO     | main:warmup_llm:38 - [Warmup] Pre-loading LLM model...
+2026-05-22 14:19:20.266 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:19:20.283 | INFO     | main:warmup_llm:40 - [Warmup] LLM service ready
+2026-05-22 14:19:20.284 | INFO     | main:lifespan:56 - [Stop] Shutting down PolicyWise AI
+2026-05-22 14:20:09.481 | INFO     | main:lifespan:51 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 14:20:09.565 | INFO     | main:lifespan:53 - [Ready] Database tables ready
+2026-05-22 14:20:09.566 | INFO     | main:warmup_llm:38 - [Warmup] Pre-loading LLM model...
+2026-05-22 14:20:09.670 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:20:09.688 | INFO     | main:warmup_llm:40 - [Warmup] LLM service ready
+2026-05-22 14:38:39.723 | INFO     | main:lifespan:51 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 14:38:39.794 | INFO     | main:lifespan:53 - [Ready] Database tables ready
+2026-05-22 14:38:39.795 | INFO     | main:warmup_llm:38 - [Warmup] Pre-loading LLM model...
+2026-05-22 14:38:39.885 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:38:39.902 | INFO     | main:warmup_llm:40 - [Warmup] LLM service ready
+2026-05-22 14:39:06.096 | INFO     | api.v1.chat:chat:44 - Chat question received: What is No Claim Bonus (NCB)?...
+2026-05-22 14:39:06.097 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is No Claim Bonus (NCB)?...
+2026-05-22 14:39:09.958 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 14:39:09.958 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:39:09.977 | INFO     | ai.services.llm_service:_generate_ollama:135 - Generating response with Ollama...
+2026-05-22 14:39:10.497 | ERROR    | ai.services.llm_service:_generate_ollama:145 - Ollama call failed: model requires more system memory (5.1 GiB) than is available (4.6 GiB) (status code: 500)
+2026-05-22 14:39:10.498 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:70 - Answered with 5 retrieved chunks
+2026-05-22 14:39:10.498 | INFO     | api.v1.chat:chat:52 - Chat answered | retrieved=5 fallback=False sources=['insurance_basics', 'car-Policy-wording', 'insurance_basics']
+2026-05-22 14:41:59.964 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:41:59.978 | INFO     | ai.services.llm_service:_generate_ollama:135 - Generating response with Ollama...
+2026-05-22 14:42:38.264 | INFO     | ai.services.llm_service:_generate_ollama:142 - Ollama response length: 724 chars
+2026-05-22 14:43:04.670 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is No Claim Bonus?...
+2026-05-22 14:43:09.120 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 14:43:09.231 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 14:43:09.245 | INFO     | ai.services.llm_service:_generate_ollama:135 - Generating response with Ollama...
+2026-05-22 14:45:05.104 | INFO     | ai.services.llm_service:_generate_ollama:142 - Ollama response length: 917 chars
+2026-05-22 14:45:05.104 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:70 - Answered with 5 retrieved chunks
+2026-05-22 15:04:14.082 | INFO     | main:lifespan:51 - [Start] Starting PolicyWise AI v1.0.0
+2026-05-22 15:04:14.185 | INFO     | main:lifespan:53 - [Ready] Database tables ready
+2026-05-22 15:04:14.185 | INFO     | main:warmup_llm:38 - [Warmup] Pre-loading LLM model...
+2026-05-22 15:04:14.271 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 15:04:14.286 | INFO     | main:warmup_llm:40 - [Warmup] LLM service ready
+2026-05-22 15:05:28.020 | INFO     | api.v1.chat:chat:44 - Chat question received: What is No Claim Bonus?...
+2026-05-22 15:05:28.020 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is No Claim Bonus?...
+2026-05-22 15:05:32.535 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 15:05:32.536 | INFO     | ai.services.llm_service:_load_ollama_fallback:58 - Using Ollama local LLM with model: llama3:8b
+2026-05-22 15:05:32.557 | INFO     | ai.services.llm_service:_generate_ollama:135 - Generating response with Ollama...
+2026-05-22 15:07:38.260 | INFO     | ai.services.llm_service:_generate_ollama:142 - Ollama response length: 543 chars
+2026-05-22 15:07:38.267 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:70 - Answered with 5 retrieved chunks
+2026-05-22 15:07:38.270 | INFO     | api.v1.chat:chat:52 - Chat answered | retrieved=5 fallback=False sources=['insurance_basics', 'car-Policy-wording', 'insurance_basics']
+2026-05-22 15:11:05.487 | INFO     | api.v1.chat:chat:44 - Chat question received: What is Insured Declared Value?...
+2026-05-22 15:11:05.489 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: What is Insured Declared Value?...
+2026-05-22 15:11:05.971 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 15:11:05.984 | INFO     | ai.services.llm_service:_generate_ollama:135 - Generating response with Ollama...
+2026-05-22 15:15:15.931 | INFO     | ai.services.llm_service:_generate_ollama:142 - Ollama response length: 927 chars
+2026-05-22 15:15:15.933 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:70 - Answered with 5 retrieved chunks
+2026-05-22 15:15:15.933 | INFO     | api.v1.chat:chat:52 - Chat answered | retrieved=5 fallback=False sources=['car-Policy-wording', 'insurance_basics', 'Two-Wheeler-Policy-Bundled']
+2026-05-22 15:37:50.489 | INFO     | api.v1.chat:chat:44 - Chat question received: hello...
+2026-05-22 15:37:50.489 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:37 - Processing query: hello...
+2026-05-22 15:37:50.527 | INFO     | ai.vectorstore.chroma_store:similarity_search:137 - Retrieved 5 chunks for query
+2026-05-22 15:37:50.528 | INFO     | ai.services.llm_service:_generate_ollama:135 - Generating response with Ollama...
+2026-05-22 15:40:57.061 | INFO     | ai.services.llm_service:_generate_ollama:142 - Ollama response length: 1113 chars
+2026-05-22 15:40:57.062 | INFO     | ai.pipelines.rag_pipeline:ask_insurance_ai:70 - Answered with 5 retrieved chunks
+2026-05-22 15:40:57.064 | INFO     | api.v1.chat:chat:52 - Chat answered | retrieved=5 fallback=False sources=['Private-Car-Policy-Bundled', 'two-wheeler-Policy-wording', 'two-wheeler-Policy-wording']
+2026-05-22 16:08:19.885 | INFO     | main:lifespan:56 - [Stop] Shutting down PolicyWise AI

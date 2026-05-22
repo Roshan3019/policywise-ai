@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     # ── AI (Phase 5) ──────────────────────────────────────────────────────────
     openai_api_key: str = ""
     google_api_key: str = ""
+    ollama_model: str = "llama3:8b"
     vector_db_path: str = "../data/vector_store"
     llm_model: str = "gpt-4o-mini"
     embedding_model: str = "text-embedding-3-small"
